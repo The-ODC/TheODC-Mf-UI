@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm, FormProvider } from "react-hook-form";
-import { Box, Button, useTheme } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { FormInput } from "./index";
 
 export default {
@@ -19,7 +19,7 @@ Supports text, select, checkbox, radio, textarea, password, phone, file upload, 
 #### 📦 Import
 
 \`\`\`js
-import { FormInput } from "SpiseBowlMfUI/sharedComp";
+import { FormInput } from "OdBitesMfUI/sharedComp";
 \`\`\`
 
 #### 🛠️ Props

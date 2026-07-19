@@ -101,7 +101,7 @@ function NavBar({ version = "0.0.0", openLogoutDialog, profileData = {} }) {
           <Box
             component="img"
             src={LOGO_1}
-            alt="SpiseBowl Logo"
+            alt="OdBites Logo"
             sx={{ width: { xs: 160, md: 200 }, cursor: "pointer" }}
             onClick={() => navigate("/")}
           />
@@ -120,7 +120,7 @@ function NavBar({ version = "0.0.0", openLogoutDialog, profileData = {} }) {
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
                     src={`${VITE_APP_ASSETS_PATH}/${profileData?.folderLocation}/${profileData?.profilePicture}`}
-                    alt={`${profileData?.firstName} ${profileData?.lastName}`}
+                    alt={`${profileData?.firstName?.split(" ")?.[0]?.[0]}${profileData?.lastName?.split(" ")?.[0]?.[0]}`}
                     sx={{ cursor: "pointer" }}
                   />
                 </IconButton>

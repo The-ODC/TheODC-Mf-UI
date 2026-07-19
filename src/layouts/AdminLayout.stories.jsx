@@ -14,7 +14,7 @@ Use this layout for all admin pages. It includes header, sidebar, and main conte
 
 #### 📦 Import
 \`\`\`js
-import { AdminLayout } from "SpiseBowlMfUI/layouts";
+import { AdminLayout } from "OdBitesMfUI/layouts";
 \`\`\`
 
 #### 🛠️ Props

@@ -14,7 +14,7 @@ A reusable MUI-based filter button that shows a popover when clicked.
 
 #### 📦 Import
 \`\`\`js
-import { FilterWrapper } from "SpiseBowlMfUI/sharedComp";
+import { FilterWrapper } from "OdBitesMfUI/sharedComp";
 \`\`\`
 
 #### 🛠️ Props

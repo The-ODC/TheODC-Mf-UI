@@ -21,7 +21,7 @@ A Higher-Order Component (HOC) that **redirects authenticated users** away from 
 
 #### 📦 Import
 \`\`\`js
-import { RestrictedToGuests } from "SpiseBowlMfUI/hoc";
+import { RestrictedToGuests } from "OdBitesMfUI/hoc";
 \`\`\`
 
 #### 🛠️ Usage

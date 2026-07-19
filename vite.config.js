@@ -3,12 +3,18 @@ import react from "@vitejs/plugin-react";
 import federation from "@originjs/vite-plugin-federation";
 import svgr from "vite-plugin-svgr";
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET,OPTIONS",
+  "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+};
+
 export default defineConfig({
   plugins: [
     react(),
     svgr(),
     federation({
-      name: "SpiseBowlMfUI",
+      name: "OdBitesMfUI",
       filename: "remoteEntry.js",
       exposes: {
         "./sharedComp": "./src/sharedComp",
@@ -21,6 +27,20 @@ export default defineConfig({
         "./hooks": "./src/hooks",
         "./hoc": "./src/hoc",
         "./utility": "./src/utility",
+        "./sharedComp/buttons": "./src/sharedComp/buttons",
+        "./sharedComp/filterWrapper": "./src/sharedComp/filterWrapper",
+        "./sharedComp/form": "./src/sharedComp/form",
+        "./sharedComp/pageHeader": "./src/sharedComp/pageHeader",
+        "./sharedComp/productCard": "./src/sharedComp/productCard",
+        "./sharedComp/profileAvatar": "./src/sharedComp/profileAvatar",
+        "./sharedComp/quantityStepper": "./src/sharedComp/quantityStepper",
+        "./helpers/noData": "./src/helpers/NoData.jsx",
+        "./utility/assets": "./src/utility/assets",
+        "./utility/formatters": "./src/utility/formatters",
+        "./utility/http": "./src/utility/http",
+        "./hooks/useStorageState": "./src/hooks/useStorageState",
+        "./hooks/useLocalStorageState": "./src/hooks/useLocalStorageState",
+        "./hoc/routeGuard": "./src/hoc/RouteGuard.jsx",
       },
       shared: {
         react: {
@@ -78,16 +98,13 @@ export default defineConfig({
   preview: {
     port: 5000,
     strictPort: true,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
+    headers: corsHeaders,
   },
   server: {
     // strictPort: true,
     port: 5000,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
+    cors: true,
+    headers: corsHeaders,
   },
   optimizeDeps: {
     // exclude: ["react", "react-dom"],

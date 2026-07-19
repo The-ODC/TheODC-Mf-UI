@@ -28,6 +28,89 @@ import { useDropzone } from "react-dropzone";
 
 import "react-phone-input-2/lib/material.css";
 
+const StyledDropzone = styled("div")(
+  ({ theme, isDragActive, rowHeight }) => ({
+    border: `2px dashed ${
+      isDragActive ? theme.palette.primary.main : theme.palette.divider
+    }`,
+    borderRadius: theme.shape.borderRadius,
+    padding: theme.spacing(2),
+    textAlign: "center",
+    cursor: "pointer",
+    color: isDragActive
+      ? theme.palette.primary.main
+      : theme.palette.text.secondary,
+    backgroundColor: isDragActive ? theme.palette.text.primary : "transparent",
+    transition: "border-color 0.2s, background-color 0.2s",
+    height: `${rowHeight * 60}px`,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  })
+);
+
+function FileDropzoneField({ field, error, label, multiple, rowHeight, inputProps }) {
+  const onDrop = (acceptedFiles) => {
+    if (multiple) {
+      field.onChange(acceptedFiles);
+    } else {
+      field.onChange(acceptedFiles[0] || null);
+    }
+  };
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    multiple,
+    accept: inputProps.accept || "*/*",
+  });
+
+  const files = field.value
+    ? Array.isArray(field.value)
+      ? field.value
+      : [field.value]
+    : [];
+
+  return (
+    <FormControl fullWidth error={!!error} sx={{ mb: 2 }}>
+      <InputLabel shrink>{label}</InputLabel>
+      <StyledDropzone
+        {...getRootProps()}
+        isDragActive={isDragActive ? 1 : 0}
+        rowHeight={rowHeight}
+      >
+        <input {...getInputProps()} {...inputProps} />
+        {isDragActive ? (
+          <Typography>Drop files here...</Typography>
+        ) : (
+          <Typography>Drag & drop files here, or click to select files</Typography>
+        )}
+      </StyledDropzone>
+
+      {files.length > 0 && (
+        <Box mt={1}>
+          <Typography variant="body2">Selected file(s):</Typography>
+          <ul>
+            {files.map((file, idx) => (
+              <li key={`${file.name || "file"}-${idx + 1}`}>{file.name}</li>
+            ))}
+          </ul>
+        </Box>
+      )}
+
+      <FormHelperText>{error?.message}</FormHelperText>
+    </FormControl>
+  );
+}
+
+FileDropzoneField.propTypes = {
+  field: PropTypes.object.isRequired,
+  error: PropTypes.object,
+  label: PropTypes.string.isRequired,
+  multiple: PropTypes.bool,
+  rowHeight: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  inputProps: PropTypes.object,
+};
+
 function FormInput({
   name,
   control,
@@ -93,29 +176,6 @@ function FormInput({
       },
     },
   }));
-
-  const StyledDropzone = styled("div")(
-    ({ theme, isDragActive, rowHeight }) => ({
-      border: `2px dashed ${
-        isDragActive ? theme.palette.primary.main : theme.palette.divider
-      }`,
-      borderRadius: theme.shape.borderRadius,
-      padding: theme.spacing(2),
-      textAlign: "center",
-      cursor: "pointer",
-      color: isDragActive
-        ? theme.palette.primary.main
-        : theme.palette.text.secondary,
-      backgroundColor: isDragActive
-        ? theme.palette.text.primary
-        : "transparent",
-      transition: "border-color 0.2s, background-color 0.2s",
-      height: `${rowHeight * 60}px`,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    })
-  );
 
   return (
     <Controller
@@ -329,59 +389,15 @@ function FormInput({
 
         // 📂 FILE INPUT (react-dropzone)
         if (inputType === "file") {
-          const onDrop = (acceptedFiles) => {
-            // Support multiple or single file(s)
-            if (multiple) {
-              field.onChange(acceptedFiles);
-            } else {
-              field.onChange(acceptedFiles[0] || null);
-            }
-          };
-
-          const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
-            useDropzone({
-              onDrop,
-              multiple,
-              accept: rest.accept || "*/*",
-            });
-
-          const files = field.value
-            ? Array.isArray(field.value)
-              ? field.value
-              : [field.value]
-            : [];
-
           return (
-            <FormControl fullWidth error={!!error} sx={{ mb: 2 }}>
-              <InputLabel shrink>{label}</InputLabel>
-              <StyledDropzone
-                {...getRootProps()}
-                isDragActive={isDragActive ? 1 : 0}
-                rowHeight={rowHeight}
-              >
-                <input {...getInputProps()} {...rest} />
-                {isDragActive ? (
-                  <Typography>Drop files here...</Typography>
-                ) : (
-                  <Typography>
-                    Drag & drop files here, or click to select files
-                  </Typography>
-                )}
-              </StyledDropzone>
-
-              {files.length > 0 && (
-                <Box mt={1}>
-                  <Typography variant="body2">Selected file(s):</Typography>
-                  <ul>
-                    {files.map((file, idx) => (
-                      <li key={idx + 1}>{file.name}</li>
-                    ))}
-                  </ul>
-                </Box>
-              )}
-
-              <FormHelperText>{error?.message}</FormHelperText>
-            </FormControl>
+            <FileDropzoneField
+              field={field}
+              error={error}
+              label={label}
+              multiple={multiple}
+              rowHeight={rowHeight}
+              inputProps={rest}
+            />
           );
         }
 

@@ -1,4 +1,10 @@
-import { createTheme, responsiveFontSizes } from "@mui/material/styles";
+import {
+  alpha,
+  createTheme,
+  darken,
+  lighten,
+  responsiveFontSizes,
+} from "@mui/material/styles";
 // 🎨 Color Constants
 import { COLORS } from "./";
 
@@ -269,5 +275,14 @@ export const getTheme = (mode) => {
     },
   });
 
-  return responsiveFontSizes(theme);
+  theme = responsiveFontSizes(theme);
+
+  // MUI 7.3+ component styles call these helpers from the theme object.
+  // Hosts can resolve a newer MUI singleton than the MF build, so keep the
+  // exposed shared theme shape compatible across patch versions.
+  theme.alpha = theme.alpha || alpha;
+  theme.lighten = theme.lighten || lighten;
+  theme.darken = theme.darken || darken;
+
+  return theme;
 };

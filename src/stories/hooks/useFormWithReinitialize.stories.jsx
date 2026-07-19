@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFormWithReinitialize } from "../../hooks";
 import { FormInput } from "../../sharedComp/form";
@@ -17,7 +16,7 @@ when \`defaultValues\` change.
 
 #### 📦 Import
 \`\`\`js
-import { useFormWithReinitialize } from "SpiseBowlMfUI/hooks";
+import { useFormWithReinitialize } from "OdBitesMfUI/hooks";
 \`\`\`
 
 ## ✅ Options
@@ -34,7 +33,6 @@ export const Example = () => {
   const {
     control,
     handleSubmit,
-    reset,
     formState: { isSubmitting },
   } = useFormWithReinitialize({
     resolver: zodResolver(""),

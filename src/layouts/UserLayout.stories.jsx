@@ -13,7 +13,7 @@ Use this layout for all user pages. It includes header, sidebar, and main conten
 
 #### 📦 Import
 \`\`\`js
-import { UserLayout } from "SpiseBowlMfUI/layouts";
+import { UserLayout } from "OdBitesMfUI/layouts";
 \`\`\`
 
 #### 🛠️ Props

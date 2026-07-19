@@ -1,4 +1,6 @@
 function parseAllCookies() {
+  if (typeof document === "undefined" || !document.cookie) return {};
+
   return document.cookie.split("; ").reduce((acc, cookie) => {
     const [name, ...val] = cookie.split("=");
     acc[name] = decodeURIComponent(val.join("="));
@@ -7,11 +9,15 @@ function parseAllCookies() {
 }
 
 function getCookie(name) {
+  if (typeof document === "undefined") return null;
+
   const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
   return match ? decodeURIComponent(match[2]) : null;
 }
 
 function setCookie(name, value, options = {}) {
+  if (typeof document === "undefined") return;
+
   let cookieStr = `${encodeURIComponent(name)}=${encodeURIComponent(value)}`;
 
   if (options.maxAgeDays !== undefined) {
@@ -33,7 +39,7 @@ function setCookie(name, value, options = {}) {
 }
 
 function removeCookie(name, options = {}) {
-  setCookie(name, "", { ...options, path: "/", maxAge: 0 });
+  setCookie(name, "", { path: "/", ...options, maxAge: 0 });
 }
 
 export const cookies = { getCookie, setCookie, removeCookie, parseAllCookies };

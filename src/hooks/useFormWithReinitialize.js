@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 
 export function useFormWithReinitialize({
@@ -7,13 +7,20 @@ export function useFormWithReinitialize({
   ...rest
 }) {
   const methods = useForm({ defaultValues, ...rest });
+  const { reset } = methods;
+  const defaultValuesKey = JSON.stringify(defaultValues);
+
+  const defaultValuesRef = useRef(defaultValues);
+
+  useEffect(() => {
+    defaultValuesRef.current = defaultValues;
+  }, [defaultValues, defaultValuesKey]);
 
   useEffect(() => {
     if (enableReinitialize) {
-      methods.reset(defaultValues);
+      reset(defaultValuesRef.current);
     }
-    // Only reset when the stringified defaultValues change
-  }, [enableReinitialize, JSON.stringify(defaultValues)]);
+  }, [defaultValuesKey, enableReinitialize, reset]);
 
   return methods;
 }

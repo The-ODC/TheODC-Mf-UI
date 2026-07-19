@@ -13,7 +13,7 @@ A custom React hook to manage cookies easily. Provides utility functions to get,
 
 #### 📦 Import
 \`\`\`js
-import { useCookies } from "SpiseBowlMfUI/hooks";
+import { useCookies } from "OdBitesMfUI/hooks";
 \`\`\`
 
 ## ✅ Returns
