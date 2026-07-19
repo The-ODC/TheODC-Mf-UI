@@ -14,20 +14,23 @@ Avatar allows users to upload and crop a profile picture using react-easy-crop.
 
 #### 📦 Import
 \`\`\`js
-import { AvatarUpload } from "SpiseBowlMfUI/sharedComp";
+import { AvatarUpload } from "OdBitesMfUI/sharedComp";
 \`\`\`
 
 ### Features
 - Clickable Avatar with edit icon
 - Image file input
 - Cropping modal with zoom slider
-- Returns base64 cropped image via onSave callback
+- Returns a cropped image File via onSave callback
 - 'viewOnly' mode for display without editing
 
 ### Props
 - \`avatar\` (string): Initial avatar image URL
 - \`onSave\` (function): Callback with cropped image
 - \`viewOnly\` (boolean): If true, disables editing
+- \`loading\` (boolean): Shows progress and blocks new selection
+- \`disabled\` (boolean): Disables editing while keeping the editable visual style available
+- \`size\` (number|string): Controls avatar and wrapper size
         `,
       },
     },
@@ -45,5 +48,19 @@ export const ViewOnly = {
   args: {
     avatar: "https://i.pravatar.cc/150?img=12",
     viewOnly: true,
+  },
+};
+
+export const Loading = {
+  args: {
+    avatar: "https://i.pravatar.cc/150?img=16",
+    loading: true,
+  },
+};
+
+export const Large = {
+  args: {
+    avatar: "https://i.pravatar.cc/150?img=24",
+    size: 140,
   },
 };

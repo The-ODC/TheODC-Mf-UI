@@ -184,7 +184,7 @@ function AdminLayout({ children, version, profileData }) {
             }}
             onClick={() => navigate("/")}
           >
-            <Box component="img" src={LOGO_1} alt="SpiseBowl Logo" sx={{}} />
+            <Box component="img" src={LOGO_1} alt="OdBites Logo" sx={{}} />
           </Box>
           <IconButton onClick={toggleTheme} color="inherit">
             {mode === "light" ? <DarkMode /> : <LightMode />}
@@ -193,8 +193,8 @@ function AdminLayout({ children, version, profileData }) {
             <Tooltip title="User Settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
-                  src={`${VITE_APP_ASSETS_PATH}${profileData?.folderLocation}/${profileData?.photo}`}
-                  alt={`${profileData?.firstName} ${profileData?.lastName}`}
+                  src={`${VITE_APP_ASSETS_PATH}${profileData?.folderLocation}/--${profileData?.photo}`}
+                  alt={`${profileData?.firstName?.split(" ")?.[0]?.[0]}${profileData?.lastName?.split(" ")?.[0]?.[0]}`}
                   sx={{ cursor: "pointer" }}
                 />
               </IconButton>

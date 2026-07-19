@@ -1,4 +1,4 @@
-name: Deploy SpiseBowl-Mf-UI Storybook to GitHub Pages
+name: Deploy OdBites-Mf-UI Storybook to GitHub Pages
 
 on:
   push:

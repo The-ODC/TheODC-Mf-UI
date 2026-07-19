@@ -11,8 +11,12 @@ const RestrictedToGuests = (Component) => {
       return <Navigate to="/" replace />;
     }
 
-    return <Component {...props} />;
+    return React.createElement(Component, props);
   };
+
+  Wrapped.displayName = `RestrictedToGuests(${
+    Component.displayName || Component.name || "Component"
+  })`;
 
   return Wrapped;
 };

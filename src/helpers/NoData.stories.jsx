@@ -14,7 +14,7 @@ A reusable component to show a friendly "No Data Found" UI with an icon, title, 
 
 #### 📦 Import
 \`\`\`js
-import { RenderIf, NoData } from "SpiseBowlMfUI/helpers";
+import { RenderIf, NoData } from "OdBitesMfUI/helpers";
 \`\`\`
 
 #### 🛠️ Props

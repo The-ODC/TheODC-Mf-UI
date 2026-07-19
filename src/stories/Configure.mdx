@@ -1,10 +1,10 @@
 import { Meta } from "@storybook/addon-docs/blocks";
 
-<Meta title="Documentation/SpiseBowlMfUI" />
+<Meta title="Documentation/OdBitesMfUI" />
 
-# SpiseBowlMfUI – Microfrontend Setup Guide
+# OdBitesMfUI – Microfrontend Setup Guide
 
-Welcome to the **SpiseBowlMfUI** Microfrontend. This guide will help you integrate and configure the shared UI components built using **Vite**, **React**, **MUI**, and [`@originjs/vite-plugin-federation`](https://github.com/originjs/vite-plugin-federation).
+Welcome to the **OdBitesMfUI** Microfrontend. This guide will help you integrate and configure the shared UI components built using **Vite**, **React**, **MUI**, and [`@originjs/vite-plugin-federation`](https://github.com/originjs/vite-plugin-federation).
 
 ---
 
@@ -23,7 +23,7 @@ Welcome to the **SpiseBowlMfUI** Microfrontend. This guide will help you integra
 
 <h2 id="overview">🔍 Overview</h2>
 
-**SpiseBowlMfUI** is a **Vite-powered Microfrontend** that exposes reusable UI modules such as layouts, forms, theme providers, etc. It is intended to be consumed by remote apps via **Module Federation**.
+**OdBitesMfUI** is a **Vite-powered Microfrontend** that exposes reusable UI modules such as layouts, forms, theme providers, etc. It is intended to be consumed by remote apps via **Module Federation**.
 
 ---
 
@@ -39,7 +39,7 @@ Welcome to the **SpiseBowlMfUI** Microfrontend. This guide will help you integra
 
 <h2 id="integration-in-remote-app">🧩 Integration in Remote App</h2>
 
-To consume `SpiseBowlMfUI` from a host or remote app:
+To consume `OdBitesMfUI` from a host or remote app:
 
 ---
 
@@ -72,9 +72,9 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       federation({
-        name: "SpiseBowlUserFE", // name of your consuming app
+        name: "OdBitesUserFE", // name of your consuming app
         remotes: {
-          SpiseBowlMfUI: `${env.VITE_MF_REMOTE_URL}/assets/remoteEntry.js`,
+          OdBitesMfUI: `${env.VITE_MF_REMOTE_URL}/assets/remoteEntry.js`,
         },
         shared: {
           react: {
@@ -170,25 +170,25 @@ In your `.env` file:
 
 ```
 // Remote URL
-VITE_MF_REMOTE_URL=https://spise-bowl-mf-ui.vercel.app
+VITE_MF_REMOTE_URL=https://odbites-mf-ui.vercel.app
 
 // Local URL
 VITE_MF_REMOTE_URL=http://localhost:5000
 ```
 
-> Replace the port with the actual one used by your `SpiseBowlMfUI` remote during local development.
+> Replace the port with the actual one used by your `OdBitesMfUI` remote during local development.
 
 ---
 
 <h3 id="example-usage">🧩 Example Usage</h3>
 
-Use components from `SpiseBowlMfUI` like this:
+Use components from `OdBitesMfUI` like this:
 
 ```js
-const Header = await import("SpiseBowlMfUI/Header");
+const Header = await import("OdBitesMfUI/Header");
 
 // Or with React.lazy
-const Header = React.lazy(() => import("SpiseBowlMfUI/Header"));
+const Header = React.lazy(() => import("OdBitesMfUI/Header"));
 ```
 
 Use inside a Suspense boundary:

@@ -1,9 +1,18 @@
-import React, { useState, useCallback, memo } from "react";
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  memo,
+} from "react";
 import Cropper from "react-easy-crop";
 import PropTypes from "prop-types";
 import {
   Avatar,
   Box,
+  CircularProgress,
   IconButton,
   Dialog,
   DialogActions,
@@ -14,16 +23,69 @@ import {
 } from "@mui/material";
 import { Edit as EditIcon } from "@mui/icons-material";
 import { getCroppedImg } from "../../helpers";
-const AvatarUpload = memo(({ avatar, onSave, viewOnly = false, ...rest }) => {
+
+function isUsableAvatar(value) {
+  const src = String(value || "").trim();
+  return Boolean(
+    src && !src.endsWith("/") && !/(^|\/)(undefined|null)(\/|$)/i.test(src)
+  );
+}
+
+const AvatarUpload = memo(
+  ({
+    avatar = "",
+    onSave,
+    viewOnly = false,
+    disabled = false,
+    loading = false,
+    size = 100,
+    accept = "image/*",
+    editLabel = "edit avatar",
+    cropTitle = "Crop Image",
+    cancelLabel = "Cancel",
+    saveLabel = "Save",
+    ...rest
+  }) => {
+  const inputId = useId();
+  const objectUrlRef = useRef("");
   const [imageSrc, setImageSrc] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [openCrop, setOpenCrop] = useState(false);
-  const [preview, setPreview] = useState(avatar);
+  const [saving, setSaving] = useState(false);
+  const [preview, setPreview] = useState(isUsableAvatar(avatar) ? avatar : "");
+  const { sx, ...avatarProps } = rest;
+  const isBusy = loading || saving;
+  const isReadOnly = viewOnly || disabled || isBusy;
+  const numericSize = Number(size);
+  const progressSize = Number.isFinite(numericSize)
+    ? Math.max(24, numericSize * 0.28)
+    : 28;
+  const previewSrc = useMemo(
+    () => (isUsableAvatar(preview) ? preview : ""),
+    [preview]
+  );
+
+  useEffect(() => {
+    setPreview(isUsableAvatar(avatar) ? avatar : "");
+  }, [avatar]);
+
+  useEffect(
+    () => () => {
+      if (objectUrlRef.current) {
+        URL.revokeObjectURL(objectUrlRef.current);
+      }
+    },
+    []
+  );
 
   const onFileChange = (e) => {
+    if (isReadOnly) return;
+
     const file = e.target.files?.[0];
+    e.target.value = null;
+
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
@@ -31,7 +93,6 @@ const AvatarUpload = memo(({ avatar, onSave, viewOnly = false, ...rest }) => {
         setOpenCrop(true);
       };
       reader.readAsDataURL(file);
-      e.target.value = null;
     }
   };
 
@@ -39,74 +100,121 @@ const AvatarUpload = memo(({ avatar, onSave, viewOnly = false, ...rest }) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
-  const handleCropSave = async () => {
-    const croppedImageFile = await getCroppedImg(imageSrc, croppedAreaPixels);
-    const previewUrl = URL.createObjectURL(croppedImageFile);
-    setPreview(previewUrl);
-    onSave?.(croppedImageFile);
+  const closeCrop = () => {
     setOpenCrop(false);
+    setImageSrc(null);
+    setCrop({ x: 0, y: 0 });
+    setZoom(1);
+    setCroppedAreaPixels(null);
+  };
+
+  const handleCropSave = async () => {
+    if (!imageSrc || !croppedAreaPixels || saving) return;
+
+    setSaving(true);
+    try {
+      const croppedImageFile = await getCroppedImg(imageSrc, croppedAreaPixels);
+      const previewUrl = URL.createObjectURL(croppedImageFile);
+
+      if (objectUrlRef.current) {
+        URL.revokeObjectURL(objectUrlRef.current);
+      }
+
+      objectUrlRef.current = previewUrl;
+      setPreview(previewUrl);
+      await onSave?.(croppedImageFile);
+      closeCrop();
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
     <>
-      <Box position="relative" width={100} height={100}>
-        {!viewOnly ? (
+      <Box position="relative" width={size} height={size}>
+        {!viewOnly && !disabled ? (
           <>
             <input
-              accept="image/*"
+              accept={accept}
               type="file"
-              id="avatar-input"
+              id={inputId}
               hidden
+              disabled={isReadOnly}
               onChange={onFileChange}
             />
-            <label htmlFor="avatar-input" style={{ cursor: "pointer" }}>
+            <label
+              htmlFor={isReadOnly ? undefined : inputId}
+              style={{
+                cursor: isReadOnly ? "default" : "pointer",
+                display: "block",
+              }}
+            >
               <Avatar
-                src={preview}
+                src={previewSrc}
                 sx={{
-                  width: 100,
-                  height: 100,
+                  width: size,
+                  height: size,
                   border: "2px solid #ccc",
+                  ...sx,
                 }}
-                {...rest}
+                {...avatarProps}
               />
-              <IconButton
-                size="small"
-                sx={{
-                  position: "absolute",
-                  bottom: 0,
-                  right: 0,
-                  bgcolor: "background.paper",
-                  borderRadius: "50%",
-                  boxShadow: 2,
-                  "&:hover": { bgcolor: "grey.500" },
-                }}
-                component="span"
-                aria-label="edit avatar"
-              >
-                <EditIcon fontSize="small" />
-              </IconButton>
+              {!isReadOnly && (
+                <IconButton
+                  size="small"
+                  sx={{
+                    position: "absolute",
+                    bottom: 0,
+                    right: 0,
+                    bgcolor: "background.paper",
+                    borderRadius: "50%",
+                    boxShadow: 2,
+                    "&:hover": { bgcolor: "grey.500" },
+                  }}
+                  component="span"
+                  aria-label={editLabel}
+                >
+                  <EditIcon fontSize="small" />
+                </IconButton>
+              )}
             </label>
           </>
         ) : (
           <Avatar
-            src={preview}
+            src={previewSrc}
             sx={{
-              width: 100,
-              height: 100,
+              width: size,
+              height: size,
               border: "2px solid #ccc",
+              ...sx,
             }}
-            {...rest}
+            {...avatarProps}
           />
+        )}
+        {isBusy && (
+          <Box
+            sx={{
+              position: "absolute",
+              inset: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: "50%",
+              bgcolor: "rgba(0, 0, 0, 0.36)",
+            }}
+          >
+            <CircularProgress size={progressSize} />
+          </Box>
         )}
       </Box>
 
       <Dialog
         open={openCrop}
-        onClose={() => setOpenCrop(false)}
+        onClose={saving ? undefined : closeCrop}
         fullWidth
         maxWidth="sm"
       >
-        <DialogTitle>Crop Image</DialogTitle>
+        <DialogTitle>{cropTitle}</DialogTitle>
         <DialogContent>
           <Box
             sx={{
@@ -137,9 +245,11 @@ const AvatarUpload = memo(({ avatar, onSave, viewOnly = false, ...rest }) => {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenCrop(false)}>Cancel</Button>
-          <Button variant="contained" onClick={handleCropSave}>
-            Save
+          <Button onClick={closeCrop} disabled={saving}>
+            {cancelLabel}
+          </Button>
+          <Button variant="contained" onClick={handleCropSave} disabled={saving}>
+            {saving ? "Saving..." : saveLabel}
           </Button>
         </DialogActions>
       </Dialog>
@@ -148,9 +258,17 @@ const AvatarUpload = memo(({ avatar, onSave, viewOnly = false, ...rest }) => {
 });
 
 AvatarUpload.propTypes = {
-  avatar: PropTypes.string.isRequired,
+  avatar: PropTypes.string,
   onSave: PropTypes.func,
   viewOnly: PropTypes.bool,
+  disabled: PropTypes.bool,
+  loading: PropTypes.bool,
+  size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  accept: PropTypes.string,
+  editLabel: PropTypes.string,
+  cropTitle: PropTypes.string,
+  cancelLabel: PropTypes.string,
+  saveLabel: PropTypes.string,
 };
 
 export default AvatarUpload;

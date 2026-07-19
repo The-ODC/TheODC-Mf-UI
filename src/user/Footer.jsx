@@ -25,7 +25,7 @@ function Footer() {
       >
         {/* Left Side */}
         <Typography variant="body2">
-          © {new Date().getFullYear()} SpiseBowl. All rights reserved.
+          © {new Date().getFullYear()} OdBites. All rights reserved.
         </Typography>
 
         {/* Right Side */}

@@ -14,7 +14,7 @@ A utility wrapper that conditionally renders its children based on a \`render\` 
 
 #### 📦 Import
 \`\`\`js
-import { RenderIf } from "SpiseBowlMfUI/helpers";
+import { RenderIf } from "OdBitesMfUI/helpers";
 \`\`\`
 
 #### 🛠️ Props

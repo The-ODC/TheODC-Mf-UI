@@ -13,7 +13,7 @@ A reusable wrapper that catches runtime errors in its child components and displ
 
 #### 📦 Import
 \`\`\`js
-import { ErrorBoundary } from "SpiseBowlMfUI/helpers";
+import { ErrorBoundary } from "OdBitesMfUI/helpers";
 \`\`\`
 
 #### 🛠️ Props
