@@ -155,19 +155,12 @@ function AdminLayout({ children, version, profileData }) {
   return (
     <>
       <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      >
+      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar
         //  sx={{ py: 1.5 }}
         >
           {isMobile && (
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={handleDrawerToggle}
-            >
+            <IconButton edge="start" color="inherit" onClick={handleDrawerToggle}>
               <MenuIcon />
             </IconButton>
           )}
@@ -193,7 +186,7 @@ function AdminLayout({ children, version, profileData }) {
             <Tooltip title="User Settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
-                  src={`${VITE_APP_ASSETS_PATH}${profileData?.folderLocation}/--${profileData?.photo}`}
+                  src={`${VITE_APP_ASSETS_PATH}${profileData?.folderLocation}/${profileData?.photo}`}
                   alt={`${profileData?.firstName?.split(" ")?.[0]?.[0]}${profileData?.lastName?.split(" ")?.[0]?.[0]}`}
                   sx={{ cursor: "pointer" }}
                 />
