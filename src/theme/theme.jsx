@@ -1,10 +1,4 @@
-import {
-  alpha,
-  createTheme,
-  darken,
-  lighten,
-  responsiveFontSizes,
-} from "@mui/material/styles";
+import { alpha, createTheme, darken, lighten, responsiveFontSizes } from "@mui/material/styles";
 // 🎨 Color Constants
 import { COLORS } from "./";
 
@@ -39,57 +33,65 @@ export const getTheme = (mode) => {
     },
 
     typography: {
-      fontFamily: "'Montserrat', sans-serif",
+      fontFamily: "'Lora', 'Montserrat', sans-serif",
       h1: {
+        fontFamily: "'DM Serif Display', serif",
         fontSize: "2.5rem",
-        fontWeight: 700,
+        fontWeight: 400,
         "@media (max-width:960px)": { fontSize: "2.25rem" },
         "@media (max-width:600px)": { fontSize: "2rem" },
       },
       h2: {
+        fontFamily: "'DM Serif Display', serif",
         fontSize: "2rem",
-        fontWeight: 600,
+        fontWeight: 400,
         "@media (max-width:960px)": { fontSize: "1.85rem" },
         "@media (max-width:600px)": { fontSize: "1.75rem" },
       },
       h3: {
+        fontFamily: "'DM Serif Display', serif",
         fontSize: "1.75rem",
-        fontWeight: 600,
+        fontWeight: 400,
         "@media (max-width:960px)": { fontSize: "1.6rem" },
         "@media (max-width:600px)": { fontSize: "1.5rem" },
       },
       h4: {
+        fontFamily: "'DM Serif Display', serif",
         fontSize: "1.5rem",
-        fontWeight: 500,
+        fontWeight: 400,
         "@media (max-width:960px)": { fontSize: "1.35rem" },
         "@media (max-width:600px)": { fontSize: "1.25rem" },
       },
       h5: {
+        fontFamily: "'DM Serif Display', serif",
         fontSize: "1.25rem",
-        fontWeight: 500,
+        fontWeight: 400,
         "@media (max-width:960px)": { fontSize: "1.1rem" },
         "@media (max-width:600px)": { fontSize: "1rem" },
       },
       h6: {
+        fontFamily: "'DM Serif Display', serif",
         fontSize: "1rem",
-        fontWeight: 500,
+        fontWeight: 400,
         "@media (max-width:960px)": { fontSize: "0.9rem" },
         "@media (max-width:600px)": { fontSize: "0.875rem" },
       },
       body1: {
+        fontFamily: "'Lora', serif",
         fontSize: "1rem",
         "@media (max-width:960px)": { fontSize: "0.95rem" },
         "@media (max-width:600px)": { fontSize: "0.875rem" },
       },
       body2: {
+        fontFamily: "'Lora', serif",
         fontSize: "0.875rem",
         "@media (max-width:960px)": { fontSize: "0.825rem" },
         "@media (max-width:600px)": { fontSize: "0.75rem" },
       },
-      subtitle1: { fontSize: "1rem" },
-      subtitle2: { fontSize: "0.875rem" },
-      button: { textTransform: "none", fontWeight: 600 },
-      caption: { fontSize: "0.75rem" },
+      subtitle1: { fontFamily: "'Lora', serif", fontSize: "1rem" },
+      subtitle2: { fontFamily: "'Lora', serif", fontSize: "0.875rem" },
+      button: { fontFamily: "'Montserrat', sans-serif", textTransform: "none", fontWeight: 600 },
+      caption: { fontFamily: "'Lora', serif", fontSize: "0.75rem" },
     },
 
     spacing: 8,
@@ -99,14 +101,15 @@ export const getTheme = (mode) => {
         defaultProps: { variant: "contained", color: "primary" },
         styleOverrides: {
           root: {
-            borderRadius: "8px",
-            padding: "10px 16px",
+            borderRadius: "50px",
+            padding: "10px 24px",
             transition: "0.3s",
+            fontFamily: "'Montserrat', sans-serif",
           },
           sizeMicro: {
-            padding: "5px 10px",
+            padding: "5px 14px",
             fontSize: "0.8rem",
-            borderRadius: "7px",
+            borderRadius: "20px",
           },
         },
       },
@@ -114,8 +117,8 @@ export const getTheme = (mode) => {
       MuiAppBar: {
         styleOverrides: {
           root: {
-            backgroundColor: mode === "light" ? "#ffffff" : "#1E1E1E",
-            color: mode === "light" ? "#000" : "#fff",
+            backgroundColor: mode === "light" ? "#FAF6EE" : "#2B2621",
+            color: mode === "light" ? "#3A3026" : "#F4EBD0",
           },
         },
       },
@@ -123,10 +126,12 @@ export const getTheme = (mode) => {
       MuiCard: {
         styleOverrides: {
           root: ({ theme }) => ({
-            backgroundColor: mode === "light" ? "#fff" : "#1E1E1E",
-            boxShadow: "0px 4px 20px rgba(0,0,0,0.05)",
-            padding: "12px",
-            borderRadius: "8px",
+            backgroundColor: mode === "light" ? "#fff" : "#352F2A",
+            boxShadow: "0px 6px 24px rgba(58, 48, 38, 0.08)",
+            padding: "16px",
+            borderRadius: "16px",
+            border: "1px solid",
+            borderColor: mode === "light" ? "#EBE3D5" : "#4A4138",
             [theme.breakpoints.up("md")]: {
               padding: "24px",
             },
@@ -140,19 +145,23 @@ export const getTheme = (mode) => {
           root: {
             "& .MuiInputBase-root": {
               height: "45px",
+              borderRadius: "50px",
               "& input": {
-                padding: "8px 14px",
+                padding: "8px 20px",
               },
             },
             "& .MuiInputBase-root.MuiInputBase-multiline": {
               height: "auto",
-              padding: "8px 14px",
+              borderRadius: "20px",
+              padding: "8px 20px",
             },
             "& .MuiOutlinedInput-root": {
               height: "45px",
+              borderRadius: "50px",
             },
             "& .MuiOutlinedInput-root.MuiInputBase-multiline": {
               height: "auto",
+              borderRadius: "20px",
             },
           },
         },
@@ -172,8 +181,8 @@ export const getTheme = (mode) => {
       MuiSelect: {
         styleOverrides: {
           root: {
-            color: mode === "light" ? "#000" : "#fff",
-            borderRadius: "8px",
+            color: mode === "light" ? "#3A3026" : "#F4EBD0",
+            borderRadius: "50px",
             height: "45px",
           },
         },
@@ -212,8 +221,7 @@ export const getTheme = (mode) => {
       MuiDivider: {
         styleOverrides: {
           root: {
-            backgroundColor:
-              mode === "light" ? COLORS.LIGHT_DIVIDER : COLORS.DARK_DIVIDER,
+            backgroundColor: mode === "light" ? COLORS.LIGHT_DIVIDER : COLORS.DARK_DIVIDER,
           },
         },
       },
@@ -230,10 +238,7 @@ export const getTheme = (mode) => {
         styleOverrides: {
           root: {
             padding: "12px",
-            color:
-              mode === "light"
-                ? COLORS.LIGHT_TEXT_PRIMARY
-                : COLORS.DARK_TEXT_PRIMARY,
+            color: mode === "light" ? COLORS.LIGHT_TEXT_PRIMARY : COLORS.DARK_TEXT_PRIMARY,
           },
         },
       },
