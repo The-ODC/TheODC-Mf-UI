@@ -1,4 +1,10 @@
-import { alpha, createTheme, darken, lighten, responsiveFontSizes } from "@mui/material/styles";
+import {
+  alpha,
+  createTheme,
+  darken,
+  lighten,
+  responsiveFontSizes,
+} from "@mui/material/styles";
 // 🎨 Color Constants
 import { COLORS } from "./";
 
@@ -8,9 +14,7 @@ export const getTheme = (mode) => {
       mode,
       primary: { main: COLORS.PRIMARY, contrastText: "#ffffff" },
       secondary: { main: COLORS.SECONDARY, contrastText: "#ffffff" },
-      error: { main: COLORS.ERROR, contrastText: "#ffffff" },
       warning: { main: COLORS.WARNING, contrastText: "#ffffff" },
-      success: { main: COLORS.SUCCESS, contrastText: "#ffffff" },
       info: { main: COLORS.INFO, contrastText: "#ffffff" },
 
       ...(mode === "light"
@@ -21,6 +25,8 @@ export const getTheme = (mode) => {
               secondary: COLORS.LIGHT_TEXT_SECONDARY,
             },
             divider: COLORS.LIGHT_DIVIDER,
+            success: { main: "#00a86b", contrastText: "#ffffff" }, // Vibrant Jade Green
+            error: { main: "#ff3b30", contrastText: "#ffffff" }, // Fiery Chili Crimson
           }
         : {
             background: { default: COLORS.DARK_BG, paper: COLORS.DARK_PAPER },
@@ -29,6 +35,8 @@ export const getTheme = (mode) => {
               secondary: COLORS.DARK_TEXT_SECONDARY,
             },
             divider: COLORS.DARK_DIVIDER,
+            success: { main: "#10d186", contrastText: "#ffffff" }, // Neon Emerald
+            error: { main: "#ff453a", contrastText: "#ffffff" }, // High-Glow Crimson
           }),
     },
 
@@ -90,7 +98,11 @@ export const getTheme = (mode) => {
       },
       subtitle1: { fontFamily: "'Lora', serif", fontSize: "1rem" },
       subtitle2: { fontFamily: "'Lora', serif", fontSize: "0.875rem" },
-      button: { fontFamily: "'Montserrat', sans-serif", textTransform: "none", fontWeight: 600 },
+      button: {
+        fontFamily: "'Montserrat', sans-serif",
+        textTransform: "none",
+        fontWeight: 600,
+      },
       caption: { fontFamily: "'Lora', serif", fontSize: "0.75rem" },
     },
 
@@ -117,8 +129,12 @@ export const getTheme = (mode) => {
       MuiAppBar: {
         styleOverrides: {
           root: {
-            backgroundColor: mode === "light" ? "#FAF6EE" : "#2B2621",
-            color: mode === "light" ? "#3A3026" : "#F4EBD0",
+            backgroundColor:
+              mode === "light" ? COLORS.LIGHT_BG : COLORS.DARK_BG,
+            color:
+              mode === "light"
+                ? COLORS.LIGHT_TEXT_PRIMARY
+                : COLORS.DARK_TEXT_PRIMARY,
           },
         },
       },
@@ -126,12 +142,17 @@ export const getTheme = (mode) => {
       MuiCard: {
         styleOverrides: {
           root: ({ theme }) => ({
-            backgroundColor: mode === "light" ? "#fff" : "#352F2A",
-            boxShadow: "0px 6px 24px rgba(58, 48, 38, 0.08)",
+            backgroundColor:
+              mode === "light" ? COLORS.LIGHT_PAPER : COLORS.DARK_PAPER,
+            boxShadow:
+              mode === "light"
+                ? "0px 6px 24px rgba(11, 12, 16, 0.04)"
+                : "0px 6px 24px rgba(0, 0, 0, 0.25)",
             padding: "16px",
             borderRadius: "16px",
             border: "1px solid",
-            borderColor: mode === "light" ? "#EBE3D5" : "#4A4138",
+            borderColor:
+              mode === "light" ? COLORS.LIGHT_DIVIDER : COLORS.DARK_DIVIDER,
             [theme.breakpoints.up("md")]: {
               padding: "24px",
             },
@@ -181,7 +202,10 @@ export const getTheme = (mode) => {
       MuiSelect: {
         styleOverrides: {
           root: {
-            color: mode === "light" ? "#3A3026" : "#F4EBD0",
+            color:
+              mode === "light"
+                ? COLORS.LIGHT_TEXT_PRIMARY
+                : COLORS.DARK_TEXT_PRIMARY,
             borderRadius: "50px",
             height: "45px",
           },
@@ -221,7 +245,8 @@ export const getTheme = (mode) => {
       MuiDivider: {
         styleOverrides: {
           root: {
-            backgroundColor: mode === "light" ? COLORS.LIGHT_DIVIDER : COLORS.DARK_DIVIDER,
+            backgroundColor:
+              mode === "light" ? COLORS.LIGHT_DIVIDER : COLORS.DARK_DIVIDER,
           },
         },
       },
@@ -229,7 +254,8 @@ export const getTheme = (mode) => {
       MuiTable: {
         styleOverrides: {
           root: {
-            backgroundColor: mode === "light" ? "#fff" : "#333",
+            backgroundColor:
+              mode === "light" ? COLORS.LIGHT_PAPER : COLORS.DARK_PAPER,
           },
         },
       },
@@ -238,7 +264,13 @@ export const getTheme = (mode) => {
         styleOverrides: {
           root: {
             padding: "12px",
-            color: mode === "light" ? COLORS.LIGHT_TEXT_PRIMARY : COLORS.DARK_TEXT_PRIMARY,
+            color:
+              mode === "light"
+                ? COLORS.LIGHT_TEXT_PRIMARY
+                : COLORS.DARK_TEXT_PRIMARY,
+            borderBottom: "1px solid",
+            borderBottomColor:
+              mode === "light" ? COLORS.LIGHT_DIVIDER : COLORS.DARK_DIVIDER,
           },
         },
       },
@@ -262,19 +294,15 @@ export const getTheme = (mode) => {
           },
         },
       },
-    },
 
-    MuiInputAdornment: {
-      styleOverrides: {
-        root: {
-          color: mode === "light" ? "#6C757D" : "#E0E0E0",
-        },
-      },
-    },
-    MuiSvgIcon: {
-      styleOverrides: {
-        root: {
-          color: mode === "light" ? "#6C757D" : "#E0E0E0",
+      MuiInputAdornment: {
+        styleOverrides: {
+          root: {
+            color:
+              mode === "light"
+                ? COLORS.LIGHT_TEXT_SECONDARY
+                : COLORS.DARK_TEXT_SECONDARY,
+          },
         },
       },
     },

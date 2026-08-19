@@ -19,40 +19,55 @@ import {
   Switch,
   OutlinedInput,
   Chip,
+  InputAdornment,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  Visibility,
+  VisibilityOff,
+  Delete as DeleteIcon,
+} from "@mui/icons-material";
 import { Controller } from "react-hook-form";
 import PropTypes from "prop-types";
 import PhoneInput from "react-phone-input-2";
 import { useDropzone } from "react-dropzone";
+import { VITE_APP_ASSETS_PATH } from "../../config/env";
 
 import "react-phone-input-2/lib/material.css";
 
-const StyledDropzone = styled("div")(
-  ({ theme, isDragActive, rowHeight }) => ({
-    border: `2px dashed ${
-      isDragActive ? theme.palette.primary.main : theme.palette.divider
-    }`,
-    borderRadius: theme.shape.borderRadius,
-    padding: theme.spacing(2),
-    textAlign: "center",
-    cursor: "pointer",
-    color: isDragActive
-      ? theme.palette.primary.main
-      : theme.palette.text.secondary,
-    backgroundColor: isDragActive ? theme.palette.text.primary : "transparent",
-    transition: "border-color 0.2s, background-color 0.2s",
-    height: `${rowHeight * 60}px`,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  })
-);
+const StyledDropzone = styled("div")(({ theme, isDragActive, rowHeight }) => ({
+  border: `2px dashed ${isDragActive ? theme.palette.primary.main : theme.palette.divider}`,
+  borderRadius: theme.shape.borderRadius,
+  padding: theme.spacing(2),
+  textAlign: "center",
+  cursor: "pointer",
+  color: isDragActive
+    ? theme.palette.primary.main
+    : theme.palette.text.secondary,
+  backgroundColor: isDragActive ? theme.palette.text.primary : "transparent",
+  transition: "border-color 0.2s, background-color 0.2s",
+  height: `${rowHeight * 60}px`,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
 
-function FileDropzoneField({ field, error, label, multiple, rowHeight, inputProps }) {
+function FileDropzoneField({
+  field,
+  error,
+  label,
+  multiple,
+  rowHeight,
+  inputProps,
+}) {
+  const files = field.value
+    ? Array.isArray(field.value)
+      ? field.value
+      : [field.value]
+    : [];
+
   const onDrop = (acceptedFiles) => {
     if (multiple) {
-      field.onChange(acceptedFiles);
+      field.onChange([...files, ...acceptedFiles]);
     } else {
       field.onChange(acceptedFiles[0] || null);
     }
@@ -64,11 +79,14 @@ function FileDropzoneField({ field, error, label, multiple, rowHeight, inputProp
     accept: inputProps.accept || "*/*",
   });
 
-  const files = field.value
-    ? Array.isArray(field.value)
-      ? field.value
-      : [field.value]
-    : [];
+  const handleRemove = (indexToRemove) => {
+    if (multiple) {
+      const newFiles = files.filter((_, idx) => idx !== indexToRemove);
+      field.onChange(newFiles);
+    } else {
+      field.onChange(null);
+    }
+  };
 
   return (
     <FormControl fullWidth error={!!error} sx={{ mb: 2 }}>
@@ -82,18 +100,79 @@ function FileDropzoneField({ field, error, label, multiple, rowHeight, inputProp
         {isDragActive ? (
           <Typography>Drop files here...</Typography>
         ) : (
-          <Typography>Drag & drop files here, or click to select files</Typography>
+          <Typography>
+            Drag & drop files here, or click to select files
+          </Typography>
         )}
       </StyledDropzone>
 
       {files.length > 0 && (
-        <Box mt={1}>
-          <Typography variant="body2">Selected file(s):</Typography>
-          <ul>
-            {files.map((file, idx) => (
-              <li key={`${file.name || "file"}-${idx + 1}`}>{file.name}</li>
-            ))}
-          </ul>
+        <Box mt={2}>
+          <Typography variant="subtitle2" gutterBottom>
+            Selected file(s):
+          </Typography>
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
+            {files.map((file, idx) => {
+              let previewUrl = "";
+              let fileName = "";
+              if (file instanceof File) {
+                previewUrl = URL.createObjectURL(file);
+                fileName = file.name;
+              } else if (typeof file === "string") {
+                previewUrl =
+                  file.startsWith("http") || file.startsWith("blob")
+                    ? file
+                    : file.startsWith("/")
+                      ? `${VITE_APP_ASSETS_PATH}${file}`
+                      : `${VITE_APP_ASSETS_PATH}/uploads/products/${file}`;
+                fileName = file.substring(file.lastIndexOf("/") + 1);
+              }
+
+              return (
+                <Box
+                  key={`${fileName}-${idx + 1}`}
+                  sx={{
+                    position: "relative",
+                    width: 100,
+                    height: 100,
+                    borderRadius: 1,
+                    overflow: "hidden",
+                    border: "1px solid",
+                    borderColor: "divider",
+                  }}
+                >
+                  <img
+                    src={previewUrl}
+                    alt={fileName}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                  <IconButton
+                    size="small"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemove(idx);
+                    }}
+                    sx={{
+                      position: "absolute",
+                      top: 4,
+                      right: 4,
+                      bgcolor: "rgba(0, 0, 0, 0.6)",
+                      color: "white",
+                      "&:hover": {
+                        bgcolor: "rgba(0, 0, 0, 0.8)",
+                      },
+                    }}
+                  >
+                    <DeleteIcon fontSize="small" />
+                  </IconButton>
+                </Box>
+              );
+            })}
+          </Box>
         </Box>
       )}
 
@@ -125,35 +204,55 @@ function FormInput({
   const [showPassword, setShowPassword] = useState(false);
 
   const StyledPhoneInputWrapper = styled("div")(({ theme }) => ({
+    marginTop: "16px",
     ".react-tel-input": {
       width: "100%",
+      fontFamily: theme.typography.fontFamily,
 
       ".form-control": {
-        height: 45,
-        fontSize: 16,
-        border: `1px solid inherit`,
-        paddingLeft: 48,
-        color: theme.palette.text.primary,
-        backgroundColor: "transparent",
+        width: "100% !important",
+        height: "45px !important",
+        fontSize: "16px",
+        borderRadius: "50px !important",
+        paddingLeft: "52px !important",
+        color: `${theme.palette.text.primary} !important`,
+        caretColor: `${theme.palette.text.primary} !important`,
+        backgroundColor: "transparent !important",
         fontFamily: theme.typography.fontFamily,
+        border: `1px solid ${theme.palette.divider} !important`,
         outline: "none",
+        boxSizing: "border-box",
+        position: "relative",
+        zIndex: 1,
+        transition: "border-color 0.2s, box-shadow 0.2s",
         "&:hover": {
-          borderColor: "inherit",
+          borderColor: `${theme.palette.text.primary} !important`,
         },
         "&:focus": {
-          borderColor: theme.palette.primary.main,
-          boxShadow: `0 0 0 2px ${theme.palette.primary.main}44`,
+          borderColor: `${theme.palette.primary.main} !important`,
+          boxShadow: `0 0 0 1px ${theme.palette.primary.main}`,
         },
       },
 
+      // Override material.css floating label that blocks input
+      ".special-label": {
+        display: "none !important",
+      },
+
       ".flag-dropdown": {
-        border: `1px solid inherit`,
+        border: "none",
         backgroundColor: "transparent",
-        boxShadow: "none",
+        borderRadius: "50px 0 0 50px",
+        paddingLeft: "8px",
       },
       ".flag-dropdown.open .selected-flag": { backgroundColor: "transparent" },
       ".flag-dropdown .selected-flag": {
         backgroundColor: "transparent",
+        borderRadius: "50px 0 0 50px",
+        paddingLeft: "16px",
+        "&:hover, &:focus, &.open": {
+          backgroundColor: "transparent",
+        },
       },
 
       ".country-list": {
@@ -333,23 +432,23 @@ function FormInput({
           );
         }
 
-        // 📞 PHONE INPUT (react-phone-input-2)
+        // 📞 PHONE INPUT (react-phone-input-2 with theme alignment)
         if (inputType === "phone") {
           return (
             <FormControl fullWidth error={!!error} sx={{ mb: 2 }}>
               <InputLabel shrink>{label}</InputLabel>
               <StyledPhoneInputWrapper theme={theme}>
                 <PhoneInput
-                  country="us"
+                  country="in"
+                  onlyCountries={["in"]}
+                  disableDropdown={true}
+                  disableCountryCode={false}
                   value={field.value || ""}
-                  onChange={field.onChange}
+                  onChange={(value) => field.onChange(value)}
+                  onBlur={field.onBlur}
                   inputProps={{
                     name: field.name,
                     required: rest.required || false,
-                    autoFocus: rest.autoFocus || false,
-                  }}
-                  inputStyle={{
-                    width: "100%",
                   }}
                   specialLabel=""
                 />
