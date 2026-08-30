@@ -39,13 +39,21 @@ import { ThemeContext } from "../theme/ThemeProviderWrapper";
 import { LOGO_1 } from "../assets";
 import { VITE_APP_ASSETS_PATH } from "../config/env";
 import LogoutDialog from "../sharedComp/dialogs/LogoutDialog";
+import useCookies from "../hooks/useCookies";
 
-function AdminLayout({ children, version, profileData }) {
+function AdminLayout({
+  children,
+  version,
+  profileData,
+  openLogoutDialog,
+  handleLogout,
+}) {
   // // initial state
   const drawerWidth = 270;
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { mode, toggleTheme } = useContext(ThemeContext);
+  const { removeCookie } = useCookies();
   const navigate = useNavigate();
 
   // // local setup
@@ -89,11 +97,29 @@ function AdminLayout({ children, version, profileData }) {
     setAnchorElUser(null);
   };
 
+  const handleLogoutClick = () => {
+    handleCloseUserMenu();
+    if (typeof openLogoutDialog === "function") {
+      openLogoutDialog();
+    } else {
+      setOpenLogoutModal(true);
+    }
+  };
+
+  const handleConfirmLogout = () => {
+    if (typeof handleLogout === "function") {
+      handleLogout();
+    } else {
+      removeCookie("admin_auth_token");
+      removeCookie("admin_id");
+      setOpenLogoutModal(false);
+      window.location.reload();
+    }
+  };
+
   const drawer = (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      <Toolbar
-      // sx={{ minHeight: { xs: 70, md: 80 } }}
-      />
+      <Toolbar />
       <List>
         {menuItems.map((menu) => (
           <NavLink
@@ -155,12 +181,17 @@ function AdminLayout({ children, version, profileData }) {
   return (
     <>
       <CssBaseline />
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-        <Toolbar
-        //  sx={{ py: 1.5 }}
-        >
+      <AppBar
+        position="fixed"
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
+        <Toolbar>
           {isMobile && (
-            <IconButton edge="start" color="inherit" onClick={handleDrawerToggle}>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={handleDrawerToggle}
+            >
               <MenuIcon />
             </IconButton>
           )}
@@ -226,12 +257,7 @@ function AdminLayout({ children, version, profileData }) {
                 <Typography variant="inherit">Profile</Typography>
               </MenuItem>
 
-              <MenuItem
-                onClick={() => {
-                  handleCloseUserMenu();
-                  setOpenLogoutModal(true);
-                }}
-              >
+              <MenuItem onClick={handleLogoutClick}>
                 <ListItemIcon>
                   <Logout fontSize="small" />
                 </ListItemIcon>
@@ -290,6 +316,7 @@ function AdminLayout({ children, version, profileData }) {
       <LogoutDialog
         open={openLogoutModal}
         onClose={() => setOpenLogoutModal(false)}
+        handleConfirm={handleConfirmLogout}
         title="Ready to log out?"
         description="You’ll be logged out of your account. Don’t worry, we’ll keep your session safe so you can log back in anytime."
         confirmLabel="Yes, Log Me Out"
@@ -303,6 +330,8 @@ AdminLayout.propTypes = {
   children: PropTypes.node.isRequired,
   version: PropTypes.string.isRequired || PropTypes.number.isRequired,
   profileData: PropTypes.object.isRequired,
+  openLogoutDialog: PropTypes.func,
+  handleLogout: PropTypes.func,
 };
 
 export default AdminLayout;

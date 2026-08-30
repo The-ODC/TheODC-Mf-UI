@@ -54,18 +54,21 @@ function useCookies() {
     setCookies((prev) => ({ ...prev, [name]: value }));
   }, []);
 
-  // Remove cookie by setting max-age to 0 and deleting from state
-  const removeCookie = useCallback(
-    (name, options = {}) => {
-      setCookie(name, "", { ...options, path: "/", maxAge: 0 });
-      setCookies((prev) => {
-        const copy = { ...prev };
-        delete copy[name];
-        return copy;
-      });
-    },
-    [setCookie]
-  );
+  // Remove cookie by setting max-age to 0, expires to past date, and deleting from state
+  const removeCookie = useCallback((name, options = {}) => {
+    const path = options.path || "/";
+    let cookieStr = `${encodeURIComponent(name)}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; max-age=0; path=${path}`;
+    if (options.domain) cookieStr += `; domain=${options.domain}`;
+    if (options.secure) cookieStr += `; secure`;
+    if (options.sameSite) cookieStr += `; samesite=${options.sameSite}`;
+    document.cookie = cookieStr;
+
+    setCookies((prev) => {
+      const copy = { ...prev };
+      delete copy[name];
+      return copy;
+    });
+  }, []);
 
   return { getCookie, setCookie, removeCookie, cookies };
 }

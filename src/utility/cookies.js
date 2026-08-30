@@ -39,7 +39,12 @@ function setCookie(name, value, options = {}) {
 }
 
 function removeCookie(name, options = {}) {
-  setCookie(name, "", { path: "/", ...options, maxAge: 0 });
+  const path = options.path || "/";
+  let cookieStr = `${encodeURIComponent(name)}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; max-age=0; path=${path}`;
+  if (options.domain) cookieStr += `; domain=${options.domain}`;
+  if (options.secure) cookieStr += `; secure`;
+  if (options.sameSite) cookieStr += `; samesite=${options.sameSite}`;
+  document.cookie = cookieStr;
 }
 
 export const cookies = { getCookie, setCookie, removeCookie, parseAllCookies };
