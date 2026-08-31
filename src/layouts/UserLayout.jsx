@@ -10,11 +10,22 @@ function UserLayout({
   children,
   version = "0.0.0",
   profileData = {},
+  isAuthenticated = false,
+  cartCount = 0,
   openLogoutDialog,
   handleLogout,
 }) {
   const { removeCookie } = useCookies();
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
+
+  const isUserLoggedIn =
+    isAuthenticated ||
+    Boolean(
+      profileData?.email ||
+      profileData?.firstName ||
+      profileData?.id ||
+      profileData?._id
+    );
 
   const handleOpenLogout = () => {
     if (typeof openLogoutDialog === "function") {
@@ -39,6 +50,8 @@ function UserLayout({
       <NavBar
         version={version}
         profileData={profileData}
+        isAuthenticated={isUserLoggedIn}
+        cartCount={cartCount}
         openLogoutDialog={handleOpenLogout}
       />
       <Box
@@ -50,8 +63,8 @@ function UserLayout({
       >
         {children}
       </Box>
-      <NavDock />
-      <Footer />
+      <NavDock isAuthenticated={isUserLoggedIn} />
+      <Footer isAuthenticated={isUserLoggedIn} />
 
       <LogoutDialog
         open={openLogoutModal}
@@ -70,6 +83,7 @@ UserLayout.propTypes = {
   children: PropTypes.node.isRequired,
   version: PropTypes.string.isRequired,
   profileData: PropTypes.object,
+  isAuthenticated: PropTypes.bool,
   openLogoutDialog: PropTypes.func,
   handleLogout: PropTypes.func,
 };

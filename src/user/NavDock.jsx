@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 import {
   BottomNavigation,
   BottomNavigationAction,
@@ -7,11 +8,23 @@ import {
   Box,
   Typography,
   IconButton,
-  Button,
   Collapse,
   styled,
 } from "@mui/material";
-import { More, Close, ExpandMore } from "@mui/icons-material";
+import {
+  Close,
+  DescriptionOutlined,
+  ExpandMore,
+  HelpOutlineRounded,
+  LocationOnOutlined,
+  LockResetRounded,
+  PersonOutlineRounded,
+  PolicyOutlined,
+  ShoppingBagOutlined,
+  SupportAgentRounded,
+  TuneRounded,
+  WidgetsRounded,
+} from "@mui/icons-material";
 import { mobileNavItems, NAV_DOCK_HEIGHT } from "./constant";
 
 // Rotate icon with transition
@@ -22,18 +35,25 @@ const ExpandMoreIcon = styled(ExpandMore)(({ theme, expand }) => ({
   }),
 }));
 
-function NavDock() {
+function NavDock({ isAuthenticated = false }) {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [value, setValue] = useState(mobileNavItems[0].path);
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState(null);
+
+  const activeValue = mobileNavItems
+    .slice(0, 3)
+    .some((item) => item.path === location.pathname)
+    ? location.pathname
+    : open
+      ? "More"
+      : false;
 
   const handleChange = (event, newValue) => {
     if (newValue === "More") {
       setOpen(true);
     } else {
-      setValue(newValue);
       navigate(newValue);
     }
   };
@@ -47,7 +67,7 @@ function NavDock() {
     <>
       {/* Bottom Navigation */}
       <BottomNavigation
-        value={value}
+        value={activeValue}
         onChange={handleChange}
         sx={{
           display: { md: "none" },
@@ -71,7 +91,11 @@ function NavDock() {
             }}
           />
         ))}
-        <BottomNavigationAction label="More" value="More" icon={<More />} />
+        <BottomNavigationAction
+          label="More"
+          value="More"
+          icon={<WidgetsRounded />}
+        />
       </BottomNavigation>
 
       {/* Bottom Drawer */}
@@ -81,9 +105,9 @@ function NavDock() {
         onClose={handleClose}
         PaperProps={{
           sx: {
-            borderTopLeftRadius: 12,
-            borderTopRightRadius: 12,
-            p: 2,
+            borderTopLeftRadius: 24,
+            borderTopRightRadius: 24,
+            p: 2.5,
           },
         }}
       >
@@ -96,105 +120,221 @@ function NavDock() {
             mb: 2,
           }}
         >
-          <Typography variant="h6">More Options</Typography>
-          <IconButton onClick={handleClose}>
-            <Close />
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <WidgetsRounded sx={{ color: "primary.main", fontSize: 22 }} />
+            <Typography variant="h6" fontWeight={800}>
+              More Options
+            </Typography>
+          </Box>
+          <IconButton onClick={handleClose} size="small">
+            <Close fontSize="small" />
           </IconButton>
         </Box>
 
-        {/* Extra Navigation Items */}
+        {/* Navigation Items in Drawer */}
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          {mobileNavItems.slice(3).map((item, index) => (
-            <Box key={index + 1} sx={{ width: "100%" }}>
+          {/* Contact Us */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1.5,
+              cursor: "pointer",
+              "&:hover": { color: "primary.main" },
+            }}
+            onClick={() => {
+              navigate("/contact-us");
+              handleClose();
+            }}
+          >
+            <SupportAgentRounded sx={{ color: "primary.main" }} />
+            <Typography variant="body1" fontWeight={600}>
+              Contact Us
+            </Typography>
+          </Box>
+
+          {/* If logged in, show My Orders and Settings */}
+          {isAuthenticated && (
+            <>
+              {/* My Orders */}
               <Box
                 sx={{
                   display: "flex",
                   alignItems: "center",
-                  gap: 1,
+                  gap: 1.5,
                   cursor: "pointer",
-                  justifyContent: "space-between",
+                  "&:hover": { color: "primary.main" },
                 }}
                 onClick={() => {
-                  if (item.child) {
-                    setExpanded((prev) =>
-                      prev === item.label ? null : item.label
-                    );
-                  } else {
-                    navigate(item.path);
-                    handleClose();
-                  }
+                  navigate("/my-orders");
+                  handleClose();
                 }}
               >
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  {item.icon}
-                  <Typography variant="body1">{item.label}</Typography>
-                </Box>
-                {item.child && (
-                  <ExpandMoreIcon expand={expanded === item.label ? 1 : 0} />
-                )}
+                <ShoppingBagOutlined sx={{ color: "primary.main" }} />
+                <Typography variant="body1" fontWeight={600}>
+                  My Orders
+                </Typography>
               </Box>
 
-              {/* Child Items */}
-              {item.child && (
+              {/* Settings Dropdown */}
+              <Box sx={{ width: "100%" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1.5,
+                    cursor: "pointer",
+                    justifyContent: "space-between",
+                  }}
+                  onClick={() =>
+                    setExpanded((prev) =>
+                      prev === "Settings" ? null : "Settings"
+                    )
+                  }
+                >
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                    <TuneRounded sx={{ color: "primary.main" }} />
+                    <Typography variant="body1" fontWeight={600}>
+                      Settings
+                    </Typography>
+                  </Box>
+                  <ExpandMoreIcon expand={expanded === "Settings" ? 1 : 0} />
+                </Box>
+
+                {/* Settings Child Items */}
                 <Collapse
-                  in={expanded === item.label}
+                  in={expanded === "Settings"}
                   timeout="auto"
                   unmountOnExit
-                  sx={{ mt: 0.6 }}
+                  sx={{ mt: 1 }}
                 >
                   <Box
                     sx={{
-                      pl: 5,
+                      pl: 4,
                       display: "flex",
                       flexDirection: "column",
-                      gap: 0.5,
+                      gap: 1.2,
                     }}
                   >
-                    {item.child.map((sub, subIndex) => (
-                      <Typography
-                        key={subIndex + 1}
-                        variant="body1"
+                    {[
+                      {
+                        label: "Edit Profile",
+                        path: "/settings/edit-profile",
+                        icon: <PersonOutlineRounded sx={{ fontSize: 18 }} />,
+                      },
+                      {
+                        label: "Change Password",
+                        path: "/settings/change-password",
+                        icon: <LockResetRounded sx={{ fontSize: 18 }} />,
+                      },
+                      {
+                        label: "Manage Addresses",
+                        path: "/settings/manage-addresses",
+                        icon: <LocationOnOutlined sx={{ fontSize: 18 }} />,
+                      },
+                    ].map((sub) => (
+                      <Box
+                        key={sub.label}
                         sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
                           cursor: "pointer",
+                          color: "text.secondary",
+                          "&:hover": { color: "primary.main" },
                         }}
                         onClick={() => {
                           navigate(sub.path);
                           handleClose();
                         }}
                       >
-                        {sub.label}
-                      </Typography>
+                        {sub.icon}
+                        <Typography variant="body2" fontWeight={500}>
+                          {sub.label}
+                        </Typography>
+                      </Box>
                     ))}
                   </Box>
                 </Collapse>
-              )}
-            </Box>
-          ))}
+              </Box>
+            </>
+          )}
 
+          {/* Static policy links with clean compact spacing */}
           <Box
             sx={{
-              mt: 2,
-              "& a": {
-                px: 0,
-                py: 0.5,
-                display: "block",
-              },
+              mt: 1,
+              pt: 1.5,
+              borderTop: "1px solid",
+              borderColor: "divider",
+              display: "flex",
+              flexDirection: "column",
+              gap: 1.2,
             }}
           >
-            <Button component={Link} to="/privacy-policy" variant="body1">
-              Privacy Policy
-            </Button>
-            <Button component={Link} to="/terms-and-conditions" variant="body1">
-              Terms & Conditions
-            </Button>
-            <Button component={Link} to="/faq-support" variant="body1">
-              Faq & Support
-            </Button>
+            <Box
+              component={Link}
+              to="/privacy-policy"
+              onClick={handleClose}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                color: "text.secondary",
+                textDecoration: "none",
+                fontSize: "0.88rem",
+                fontWeight: 500,
+                "&:hover": { color: "primary.main" },
+              }}
+            >
+              <PolicyOutlined sx={{ fontSize: 18 }} />
+              <span>Privacy Policy</span>
+            </Box>
+            <Box
+              component={Link}
+              to="/terms-and-conditions"
+              onClick={handleClose}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                color: "text.secondary",
+                textDecoration: "none",
+                fontSize: "0.88rem",
+                fontWeight: 500,
+                "&:hover": { color: "primary.main" },
+              }}
+            >
+              <DescriptionOutlined sx={{ fontSize: 18 }} />
+              <span>Terms & Conditions</span>
+            </Box>
+            <Box
+              component={Link}
+              to="/faq-support"
+              onClick={handleClose}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                color: "text.secondary",
+                textDecoration: "none",
+                fontSize: "0.88rem",
+                fontWeight: 500,
+                "&:hover": { color: "primary.main" },
+              }}
+            >
+              <HelpOutlineRounded sx={{ fontSize: 18 }} />
+              <span>FAQ & Support</span>
+            </Box>
           </Box>
         </Box>
       </Drawer>
     </>
   );
 }
+
+NavDock.propTypes = {
+  isAuthenticated: PropTypes.bool,
+};
 
 export default NavDock;

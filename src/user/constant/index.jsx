@@ -1,10 +1,12 @@
+import React from "react";
 import {
-  MenuBook,
-  FoodBank,
-  Home,
-  ContactPhone,
-  ShoppingBag,
-  Settings,
+  ContactSupportRounded,
+  HomeRounded,
+  RestaurantMenuRounded,
+  SettingsOutlined,
+  ShoppingBagOutlined,
+  StorefrontRounded,
+  SupportAgentRounded,
 } from "@mui/icons-material";
 
 export const NAV_DOCK_HEIGHT = 64;
@@ -13,22 +15,22 @@ export const navItems = [
   {
     label: "Home",
     path: "/",
-    icon: <Home />,
+    icon: <HomeRounded />,
   },
   {
     label: "Our Menu",
     path: "/our-menu",
-    icon: <MenuBook />,
+    icon: <RestaurantMenuRounded />,
   },
   {
     label: "About Us",
     path: "/about-us",
-    icon: <FoodBank />,
+    icon: <StorefrontRounded />,
   },
   {
     label: "Contact Us",
     path: "/contact-us",
-    icon: <ContactPhone />,
+    icon: <SupportAgentRounded />,
   },
 ];
 
@@ -37,12 +39,12 @@ export const mobileNavItems = [
   {
     label: "My Orders",
     path: "/my-orders",
-    icon: <ShoppingBag />,
+    icon: <ShoppingBagOutlined />,
   },
   {
     label: "Settings",
     path: "/settings",
-    icon: <Settings />,
+    icon: <SettingsOutlined />,
     child: [
       {
         label: "Edit Profile",
@@ -55,6 +57,6 @@ export const mobileNavItems = [
   {
     label: "Contact Us",
     path: "/contact-us",
-    icon: <ContactPhone />,
+    icon: <ContactSupportRounded />,
   },
 ];
