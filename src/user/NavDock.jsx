@@ -16,16 +16,19 @@ import {
   DescriptionOutlined,
   ExpandMore,
   HelpOutlineRounded,
+  HomeRounded,
   LocationOnOutlined,
   LockResetRounded,
   PersonOutlineRounded,
   PolicyOutlined,
+  RestaurantMenuRounded,
   ShoppingBagOutlined,
+  StorefrontRounded,
   SupportAgentRounded,
   TuneRounded,
   WidgetsRounded,
 } from "@mui/icons-material";
-import { mobileNavItems, NAV_DOCK_HEIGHT } from "./constant";
+import { NAV_DOCK_HEIGHT } from "./constant";
 
 // Rotate icon with transition
 const ExpandMoreIcon = styled(ExpandMore)(({ theme, expand }) => ({
@@ -42,9 +45,32 @@ function NavDock({ isAuthenticated = false }) {
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState(null);
 
-  const activeValue = mobileNavItems
-    .slice(0, 3)
-    .some((item) => item.path === location.pathname)
+  // Dynamic bottom dock tabs based on authentication
+  const dockItems = [
+    {
+      label: "Home",
+      path: "/",
+      icon: <HomeRounded />,
+    },
+    {
+      label: "Our Menu",
+      path: "/our-menu",
+      icon: <RestaurantMenuRounded />,
+    },
+    isAuthenticated
+      ? {
+          label: "My Orders",
+          path: "/my-orders",
+          icon: <ShoppingBagOutlined />,
+        }
+      : {
+          label: "About Us",
+          path: "/about-us",
+          icon: <StorefrontRounded />,
+        },
+  ];
+
+  const activeValue = dockItems.some((item) => item.path === location.pathname)
     ? location.pathname
     : open
       ? "More"
@@ -65,7 +91,7 @@ function NavDock({ isAuthenticated = false }) {
 
   return (
     <>
-      {/* Bottom Navigation */}
+      {/* Bottom Navigation Dock */}
       <BottomNavigation
         value={activeValue}
         onChange={handleChange}
@@ -79,7 +105,7 @@ function NavDock({ isAuthenticated = false }) {
           zIndex: 1200,
         }}
       >
-        {mobileNavItems.slice(0, 3).map((item, index) => (
+        {dockItems.map((item, index) => (
           <BottomNavigationAction
             key={index + 1}
             label={item.label}
@@ -133,6 +159,28 @@ function NavDock({ isAuthenticated = false }) {
 
         {/* Navigation Items in Drawer */}
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          {/* If Logged In: Show About Us inside drawer (since My Orders is outside) */}
+          {isAuthenticated && (
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1.5,
+                cursor: "pointer",
+                "&:hover": { color: "primary.main" },
+              }}
+              onClick={() => {
+                navigate("/about-us");
+                handleClose();
+              }}
+            >
+              <StorefrontRounded sx={{ color: "primary.main" }} />
+              <Typography variant="body1" fontWeight={600}>
+                About Us
+              </Typography>
+            </Box>
+          )}
+
           {/* Contact Us */}
           <Box
             sx={{
@@ -153,114 +201,91 @@ function NavDock({ isAuthenticated = false }) {
             </Typography>
           </Box>
 
-          {/* If logged in, show My Orders and Settings */}
+          {/* If Logged In: Show Settings dropdown */}
           {isAuthenticated && (
-            <>
-              {/* My Orders */}
+            <Box sx={{ width: "100%" }}>
               <Box
                 sx={{
                   display: "flex",
                   alignItems: "center",
                   gap: 1.5,
                   cursor: "pointer",
-                  "&:hover": { color: "primary.main" },
+                  justifyContent: "space-between",
                 }}
-                onClick={() => {
-                  navigate("/my-orders");
-                  handleClose();
-                }}
+                onClick={() =>
+                  setExpanded((prev) =>
+                    prev === "Settings" ? null : "Settings"
+                  )
+                }
               >
-                <ShoppingBagOutlined sx={{ color: "primary.main" }} />
-                <Typography variant="body1" fontWeight={600}>
-                  My Orders
-                </Typography>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                  <TuneRounded sx={{ color: "primary.main" }} />
+                  <Typography variant="body1" fontWeight={600}>
+                    Settings
+                  </Typography>
+                </Box>
+                <ExpandMoreIcon expand={expanded === "Settings" ? 1 : 0} />
               </Box>
 
-              {/* Settings Dropdown */}
-              <Box sx={{ width: "100%" }}>
+              {/* Settings Child Items */}
+              <Collapse
+                in={expanded === "Settings"}
+                timeout="auto"
+                unmountOnExit
+                sx={{ mt: 1 }}
+              >
                 <Box
                   sx={{
+                    pl: 4,
                     display: "flex",
-                    alignItems: "center",
-                    gap: 1.5,
-                    cursor: "pointer",
-                    justifyContent: "space-between",
+                    flexDirection: "column",
+                    gap: 1.2,
                   }}
-                  onClick={() =>
-                    setExpanded((prev) =>
-                      prev === "Settings" ? null : "Settings"
-                    )
-                  }
                 >
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                    <TuneRounded sx={{ color: "primary.main" }} />
-                    <Typography variant="body1" fontWeight={600}>
-                      Settings
-                    </Typography>
-                  </Box>
-                  <ExpandMoreIcon expand={expanded === "Settings" ? 1 : 0} />
+                  {[
+                    {
+                      label: "Edit Profile",
+                      path: "/settings/edit-profile",
+                      icon: <PersonOutlineRounded sx={{ fontSize: 18 }} />,
+                    },
+                    {
+                      label: "Change Password",
+                      path: "/settings/change-password",
+                      icon: <LockResetRounded sx={{ fontSize: 18 }} />,
+                    },
+                    {
+                      label: "Manage Addresses",
+                      path: "/settings/manage-addresses",
+                      icon: <LocationOnOutlined sx={{ fontSize: 18 }} />,
+                    },
+                  ].map((sub) => (
+                    <Box
+                      key={sub.label}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                        cursor: "pointer",
+                        color: "text.secondary",
+                        "&:hover": { color: "primary.main" },
+                      }}
+                      onClick={() => {
+                        navigate(sub.path);
+                        handleClose();
+                      }}
+                    >
+                      {sub.icon}
+                      <Typography variant="body2" fontWeight={500}>
+                        {sub.label}
+                      </Typography>
+                    </Box>
+                  ))}
                 </Box>
-
-                {/* Settings Child Items */}
-                <Collapse
-                  in={expanded === "Settings"}
-                  timeout="auto"
-                  unmountOnExit
-                  sx={{ mt: 1 }}
-                >
-                  <Box
-                    sx={{
-                      pl: 4,
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 1.2,
-                    }}
-                  >
-                    {[
-                      {
-                        label: "Edit Profile",
-                        path: "/settings/edit-profile",
-                        icon: <PersonOutlineRounded sx={{ fontSize: 18 }} />,
-                      },
-                      {
-                        label: "Change Password",
-                        path: "/settings/change-password",
-                        icon: <LockResetRounded sx={{ fontSize: 18 }} />,
-                      },
-                      {
-                        label: "Manage Addresses",
-                        path: "/settings/manage-addresses",
-                        icon: <LocationOnOutlined sx={{ fontSize: 18 }} />,
-                      },
-                    ].map((sub) => (
-                      <Box
-                        key={sub.label}
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 1,
-                          cursor: "pointer",
-                          color: "text.secondary",
-                          "&:hover": { color: "primary.main" },
-                        }}
-                        onClick={() => {
-                          navigate(sub.path);
-                          handleClose();
-                        }}
-                      >
-                        {sub.icon}
-                        <Typography variant="body2" fontWeight={500}>
-                          {sub.label}
-                        </Typography>
-                      </Box>
-                    ))}
-                  </Box>
-                </Collapse>
-              </Box>
-            </>
+              </Collapse>
+            </Box>
           )}
 
-          {/* Static policy links with clean compact spacing */}
+          {/* Static policy links */}
           <Box
             sx={{
               mt: 1,
