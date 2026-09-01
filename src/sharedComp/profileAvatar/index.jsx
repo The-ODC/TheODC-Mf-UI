@@ -23,17 +23,23 @@ import {
 } from "@mui/material";
 import { Edit as EditIcon } from "@mui/icons-material";
 import { getCroppedImg } from "../../helpers";
+import { getInitials } from "../../utility";
 
 function isUsableAvatar(value) {
   const src = String(value || "").trim();
   return Boolean(
-    src && !src.endsWith("/") && !/(^|\/)(undefined|null)(\/|$)/i.test(src)
+    src &&
+    !src.endsWith("/") &&
+    !/(^|\/)(undefined|null)(\/|$)/i.test(src) &&
+    !src.includes("static/images/avatar")
   );
 }
 
 const AvatarUpload = memo(
   ({
     avatar = "",
+    name = "",
+    alt = "",
     onSave,
     viewOnly = false,
     disabled = false,
@@ -44,6 +50,8 @@ const AvatarUpload = memo(
     cropTitle = "Crop Image",
     cancelLabel = "Cancel",
     saveLabel = "Save",
+    children,
+    sx,
     ...rest
   }) => {
     const inputId = useId();
@@ -57,7 +65,7 @@ const AvatarUpload = memo(
     const [preview, setPreview] = useState(
       isUsableAvatar(avatar) ? avatar : ""
     );
-    const { sx, ...avatarProps } = rest;
+
     const isBusy = loading || saving;
     const isReadOnly = viewOnly || disabled || isBusy;
     const numericSize = Number(size);
@@ -68,6 +76,12 @@ const AvatarUpload = memo(
       () => (isUsableAvatar(preview) ? preview : ""),
       [preview]
     );
+
+    const initials = useMemo(() => {
+      if (children) return children;
+      const fullName = String(name || alt || rest.alt || "").trim();
+      return getInitials(fullName);
+    }, [children, name, alt, rest.alt]);
 
     useEffect(() => {
       setPreview(isUsableAvatar(avatar) ? avatar : "");
@@ -134,6 +148,29 @@ const AvatarUpload = memo(
       }
     };
 
+    const avatarElement = (
+      <Avatar
+        src={previewSrc || undefined}
+        sx={{
+          width: size,
+          height: size,
+          border: "2px solid",
+          borderColor: "divider",
+          bgcolor: previewSrc ? "transparent" : "primary.main",
+          color: "primary.contrastText",
+          fontSize: Number.isFinite(numericSize)
+            ? `${Math.max(14, Math.round(numericSize * 0.36))}px`
+            : "1.5rem",
+          fontWeight: 700,
+          letterSpacing: "0.05em",
+          ...sx,
+        }}
+        {...rest}
+      >
+        {!previewSrc ? initials || null : null}
+      </Avatar>
+    );
+
     return (
       <>
         <Box position="relative" width={size} height={size}>
@@ -154,16 +191,7 @@ const AvatarUpload = memo(
                   display: "block",
                 }}
               >
-                <Avatar
-                  src={previewSrc}
-                  sx={{
-                    width: size,
-                    height: size,
-                    border: "2px solid #ccc",
-                    ...sx,
-                  }}
-                  {...avatarProps}
-                />
+                {avatarElement}
                 {!isReadOnly && (
                   <IconButton
                     size="small"
@@ -185,16 +213,7 @@ const AvatarUpload = memo(
               </label>
             </>
           ) : (
-            <Avatar
-              src={previewSrc}
-              sx={{
-                width: size,
-                height: size,
-                border: "2px solid #ccc",
-                ...sx,
-              }}
-              {...avatarProps}
-            />
+            avatarElement
           )}
           {isBusy && (
             <Box
@@ -269,6 +288,8 @@ const AvatarUpload = memo(
 
 AvatarUpload.propTypes = {
   avatar: PropTypes.string,
+  name: PropTypes.string,
+  alt: PropTypes.string,
   onSave: PropTypes.func,
   viewOnly: PropTypes.bool,
   disabled: PropTypes.bool,
@@ -279,6 +300,8 @@ AvatarUpload.propTypes = {
   cropTitle: PropTypes.string,
   cancelLabel: PropTypes.string,
   saveLabel: PropTypes.string,
+  children: PropTypes.node,
+  sx: PropTypes.object,
 };
 
 export default AvatarUpload;

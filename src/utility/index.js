@@ -14,6 +14,7 @@ export {
   formatCurrency,
   formatDateTime,
   getActivePrice,
+  getInitials,
   getRecordId,
   readableLabel,
 } from "./formatters";
