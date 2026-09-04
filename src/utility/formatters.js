@@ -1,9 +1,13 @@
 export function getRecordId(record, keys = ["id", "_id"]) {
   if (!record) return "";
+  if (typeof record === "string") return record.trim();
+  if (typeof record === "number") return String(record);
 
   const keyList = Array.isArray(keys) ? keys : [keys];
-  const value = keyList.map((key) => record?.[key]).find(Boolean);
-  return value ? String(value) : "";
+  const value = keyList
+    .map((key) => record?.[key])
+    .find((v) => v !== undefined && v !== null && v !== "");
+  return value ? String(value).trim() : "";
 }
 
 export function getActivePrice(
