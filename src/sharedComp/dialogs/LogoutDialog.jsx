@@ -7,7 +7,6 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import useCookies from "../../hooks/useCookies";
 
 function LogoutDialog({
   open,
@@ -18,8 +17,6 @@ function LogoutDialog({
   confirmLabel = "Yes, Log Me Out",
   cancelLabel = "Cancel",
 }) {
-  const { removeCookie } = useCookies();
-
   const cancelRef = useRef(null);
   const confirmRef = useRef(null);
   const [btnWidth, setBtnWidth] = useState(100);
