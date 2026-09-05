@@ -36,7 +36,7 @@ import {
 } from "@mui/icons-material";
 import { NavLink, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../theme/ThemeProviderWrapper";
-import { LOGO_1 } from "../assets";
+import { DARK_LOGO, LIGHT_LOGO } from "../assets";
 import { VITE_APP_ASSETS_PATH } from "../config/env";
 import LogoutDialog from "../sharedComp/dialogs/LogoutDialog";
 import useCookies from "../hooks/useCookies";
@@ -53,6 +53,7 @@ function AdminLayout({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { mode, toggleTheme } = useContext(ThemeContext);
+  const isDark = theme.palette.mode === "dark" || mode === "dark";
   const { removeCookie } = useCookies();
   const navigate = useNavigate();
 
@@ -119,7 +120,15 @@ function AdminLayout({
 
   const drawer = (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      <Toolbar />
+      <Toolbar
+        sx={{
+          minHeight: {
+            xs: "72px !important",
+            sm: "78px !important",
+            md: "84px !important",
+          },
+        }}
+      />
       <List>
         {menuItems.map((menu) => (
           <NavLink
@@ -185,7 +194,16 @@ function AdminLayout({
         position="fixed"
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
       >
-        <Toolbar>
+        <Toolbar
+          sx={{
+            minHeight: {
+              xs: "72px !important",
+              sm: "78px !important",
+              md: "84px !important",
+            },
+            px: { xs: 1.5, sm: 2.5 },
+          }}
+        >
           {isMobile && (
             <IconButton
               edge="start"
@@ -201,14 +219,23 @@ function AdminLayout({
               display: "flex",
               alignItems: "center",
               justifyContent: { xs: "center", md: "start" },
-              img: {
-                width: { xs: 160, md: 200 },
-                cursor: "pointer",
-              },
+              py: 0.5,
             }}
             onClick={() => navigate("/")}
           >
-            <Box component="img" src={LOGO_1} alt="OdBites Logo" sx={{}} />
+            <Box
+              component="img"
+              src={isDark ? DARK_LOGO : LIGHT_LOGO}
+              alt="The ODC Logo"
+              sx={{
+                width: "auto",
+                maxHeight: { xs: 52, sm: 60, md: 68 },
+                objectFit: "contain",
+                cursor: "pointer",
+                transition: "transform 0.2s ease",
+                "&:hover": { transform: "scale(1.02)" },
+              }}
+            />
           </Box>
           <IconButton onClick={toggleTheme} color="inherit">
             {mode === "light" ? <DarkMode /> : <LightMode />}
@@ -306,9 +333,18 @@ function AdminLayout({
             xs: "100%",
             md: `calc(100% - ${drawerWidth}px)`,
           },
+          p: { xs: 2, sm: 3 },
         }}
       >
-        <Toolbar sx={{ minHeight: { xs: 50 } }} />
+        <Toolbar
+          sx={{
+            minHeight: {
+              xs: "72px !important",
+              sm: "78px !important",
+              md: "84px !important",
+            },
+          }}
+        />
 
         {children}
       </Box>

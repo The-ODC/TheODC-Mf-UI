@@ -28,12 +28,20 @@ export function formatCurrency(
     minimumFractionDigits,
   } = {}
 ) {
+  let numericValue = 0;
+  if (typeof value === "number") {
+    numericValue = Number.isNaN(value) ? 0 : value;
+  } else if (typeof value === "string") {
+    const cleaned = value.replace(/[^0-9.-]+/g, "");
+    numericValue = cleaned ? Number(cleaned) : 0;
+    if (Number.isNaN(numericValue)) numericValue = 0;
+  }
   return new Intl.NumberFormat(locale, {
     style: "currency",
     currency,
     maximumFractionDigits,
     ...(minimumFractionDigits !== undefined ? { minimumFractionDigits } : {}),
-  }).format(Number(value || 0));
+  }).format(numericValue);
 }
 
 export function formatDateTime(

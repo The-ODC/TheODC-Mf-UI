@@ -25,8 +25,8 @@ export const getTheme = (mode) => {
               secondary: COLORS.LIGHT_TEXT_SECONDARY,
             },
             divider: COLORS.LIGHT_DIVIDER,
-            success: { main: "#00a86b", contrastText: "#ffffff" }, // Vibrant Jade Green
-            error: { main: "#ff3b30", contrastText: "#ffffff" }, // Fiery Chili Crimson
+            success: { main: COLORS.SUCCESS, contrastText: "#ffffff" },
+            error: { main: COLORS.ERROR, contrastText: "#ffffff" },
           }
         : {
             background: { default: COLORS.DARK_BG, paper: COLORS.DARK_PAPER },
@@ -35,8 +35,8 @@ export const getTheme = (mode) => {
               secondary: COLORS.DARK_TEXT_SECONDARY,
             },
             divider: COLORS.DARK_DIVIDER,
-            success: { main: "#10d186", contrastText: "#ffffff" }, // Neon Emerald
-            error: { main: "#ff453a", contrastText: "#ffffff" }, // High-Glow Crimson
+            success: { main: "#34C759", contrastText: "#ffffff" },
+            error: { main: "#FF453A", contrastText: "#ffffff" },
           }),
     },
 

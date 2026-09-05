@@ -22,7 +22,7 @@ import {
   WhatsApp,
 } from "@mui/icons-material";
 
-import { LOGO_1 } from "../assets";
+import { DARK_LOGO, LIGHT_LOGO } from "../assets";
 
 function Footer({ isAuthenticated = false }) {
   const theme = useTheme();
@@ -54,11 +54,12 @@ function Footer({ isAuthenticated = false }) {
             <Stack spacing={2.5}>
               <Box
                 component="img"
-                src={LOGO_1}
-                alt="OdBites Logo"
+                src={isDark ? DARK_LOGO : LIGHT_LOGO}
+                alt="The ODC Logo"
                 sx={{
-                  width: { xs: 150, sm: 180 },
-                  height: "auto",
+                  width: "auto",
+                  maxHeight: { xs: 54, sm: 66, md: 74 },
+                  objectFit: "contain",
                   cursor: "pointer",
                 }}
               />
@@ -245,7 +246,7 @@ function Footer({ isAuthenticated = false }) {
           spacing={2}
         >
           <Typography variant="caption" color="text.secondary">
-            © {new Date().getFullYear()} OdBites. All rights reserved.
+            © {new Date().getFullYear()} The ODC. All rights reserved.
           </Typography>
           <Typography variant="caption" color="text.secondary">
             Handcrafted with authentic Odia craft & Koraput brews ☕

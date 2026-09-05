@@ -28,7 +28,7 @@ import {
   ShoppingBag,
 } from "@mui/icons-material";
 
-import { LOGO_1 } from "../assets";
+import { DARK_LOGO, LIGHT_LOGO } from "../assets";
 import { ThemeContext } from "../theme";
 import { VITE_APP_ASSETS_PATH } from "../config/env";
 import { NAV_DOCK_HEIGHT, navItems } from "./constant";
@@ -42,6 +42,7 @@ function NavBar({
 }) {
   const theme = useTheme();
   const { mode, toggleTheme } = useContext(ThemeContext);
+  const isDark = theme.palette.mode === "dark" || mode === "dark";
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -115,6 +116,11 @@ function NavBar({
             justifyContent: "space-between",
             alignItems: "center",
             px: { xs: 1.5, sm: 3 },
+            minHeight: {
+              xs: "72px !important",
+              sm: "78px !important",
+              md: "84px !important",
+            },
           }}
         >
           {/* Left: Navigation Links */}
@@ -177,12 +183,28 @@ function NavBar({
 
           {/* Center: Brand Logo */}
           <Box
-            component="img"
-            src={LOGO_1}
-            alt="OdBites Logo"
-            sx={{ width: { xs: 125, sm: 155, md: 190 }, cursor: "pointer" }}
-            onClick={() => navigate("/")}
-          />
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              py: 0.5,
+            }}
+          >
+            <Box
+              component="img"
+              src={isDark ? DARK_LOGO : LIGHT_LOGO}
+              alt="The ODC Logo"
+              sx={{
+                width: "auto",
+                maxHeight: { xs: 52, sm: 62, md: 70 },
+                objectFit: "contain",
+                cursor: "pointer",
+                transition: "transform 0.2s ease",
+                "&:hover": { transform: "scale(1.02)" },
+              }}
+              onClick={() => navigate("/")}
+            />
+          </Box>
 
           {/* Right: Actions */}
           <Box
@@ -336,7 +358,15 @@ function NavBar({
           </Box>
         </Toolbar>
       </AppBar>
-      <Toolbar />
+      <Toolbar
+        sx={{
+          minHeight: {
+            xs: "72px !important",
+            sm: "78px !important",
+            md: "84px !important",
+          },
+        }}
+      />
     </>
   );
 }
