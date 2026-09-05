@@ -24,6 +24,7 @@ export function formatCurrency(
   {
     locale = "en-IN",
     currency = "INR",
+    showSymbol = true,
     maximumFractionDigits = 2,
     minimumFractionDigits,
   } = {}
@@ -36,12 +37,18 @@ export function formatCurrency(
     numericValue = cleaned ? Number(cleaned) : 0;
     if (Number.isNaN(numericValue)) numericValue = 0;
   }
-  return new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency,
+
+  const options = {
     maximumFractionDigits,
     ...(minimumFractionDigits !== undefined ? { minimumFractionDigits } : {}),
-  }).format(numericValue);
+  };
+
+  if (showSymbol && currency) {
+    options.style = "currency";
+    options.currency = currency;
+  }
+
+  return new Intl.NumberFormat(locale, options).format(numericValue);
 }
 
 export function formatDateTime(
