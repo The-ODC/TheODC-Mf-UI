@@ -39,7 +39,12 @@ function NavBar({
   profileData = {},
   isAuthenticated = false,
   cartCount = 0,
+  navItems: propNavItems,
 }) {
+  const currentNavItems =
+    Array.isArray(propNavItems) && propNavItems.length > 0
+      ? propNavItems
+      : navItems;
   const theme = useTheme();
   const { mode, toggleTheme } = useContext(ThemeContext);
   const isDark = theme.palette.mode === "dark" || mode === "dark";
@@ -131,7 +136,7 @@ function NavBar({
               gap: 1,
             }}
           >
-            {navItems.map((item) => {
+            {currentNavItems.map((item) => {
               const active = isItemActive(item.path);
 
               return (

@@ -38,7 +38,7 @@ const ExpandMoreIcon = styled(ExpandMore)(({ theme, expand }) => ({
   }),
 }));
 
-function NavDock({ isAuthenticated = false }) {
+function NavDock({ isAuthenticated = false, dockItems: propDockItems }) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -46,7 +46,7 @@ function NavDock({ isAuthenticated = false }) {
   const [expanded, setExpanded] = useState(null);
 
   // Dynamic bottom dock tabs based on authentication
-  const dockItems = [
+  const defaultDockItems = [
     {
       label: "Home",
       path: "/",
@@ -70,7 +70,14 @@ function NavDock({ isAuthenticated = false }) {
         },
   ];
 
-  const activeValue = dockItems.some((item) => item.path === location.pathname)
+  const currentDockItems =
+    Array.isArray(propDockItems) && propDockItems.length > 0
+      ? propDockItems
+      : defaultDockItems;
+
+  const activeValue = currentDockItems.some(
+    (item) => item.path === location.pathname
+  )
     ? location.pathname
     : open
       ? "More"
@@ -105,7 +112,7 @@ function NavDock({ isAuthenticated = false }) {
           zIndex: 1200,
         }}
       >
-        {dockItems.map((item, index) => (
+        {currentDockItems.map((item, index) => (
           <BottomNavigationAction
             key={index + 1}
             label={item.label}

@@ -14,6 +14,8 @@ function UserLayout({
   cartCount = 0,
   openLogoutDialog,
   handleLogout,
+  navItems,
+  dockItems,
 }) {
   const { removeCookie } = useCookies();
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
@@ -53,6 +55,7 @@ function UserLayout({
         isAuthenticated={isUserLoggedIn}
         cartCount={cartCount}
         openLogoutDialog={handleOpenLogout}
+        navItems={navItems}
       />
       <Box
         component="main"
@@ -63,7 +66,7 @@ function UserLayout({
       >
         {children}
       </Box>
-      <NavDock isAuthenticated={isUserLoggedIn} />
+      <NavDock isAuthenticated={isUserLoggedIn} dockItems={dockItems} />
       <Footer isAuthenticated={isUserLoggedIn} />
 
       <LogoutDialog
@@ -84,8 +87,11 @@ UserLayout.propTypes = {
   version: PropTypes.string.isRequired,
   profileData: PropTypes.object,
   isAuthenticated: PropTypes.bool,
+  cartCount: PropTypes.number,
   openLogoutDialog: PropTypes.func,
   handleLogout: PropTypes.func,
+  navItems: PropTypes.array,
+  dockItems: PropTypes.array,
 };
 
 export default UserLayout;

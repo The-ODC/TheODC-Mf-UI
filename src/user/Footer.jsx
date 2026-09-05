@@ -51,22 +51,25 @@ function Footer({ isAuthenticated = false }) {
         >
           {/* Column 1: Brand & Social */}
           <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-            <Stack spacing={2.5}>
+            <Stack spacing={2.5} alignItems="flex-start">
               <Box
                 component="img"
                 src={isDark ? DARK_LOGO : LIGHT_LOGO}
                 alt="The ODC Logo"
                 sx={{
+                  display: "block",
                   width: "auto",
                   maxHeight: { xs: 54, sm: 66, md: 74 },
                   objectFit: "contain",
+                  objectPosition: "left center",
+                  alignSelf: "flex-start",
                   cursor: "pointer",
                 }}
               />
               <Typography
                 variant="body2"
                 color="text.secondary"
-                sx={{ maxWidth: 340, lineHeight: 1.7 }}
+                sx={{ maxWidth: 340, lineHeight: 1.7, textAlign: "left" }}
               >
                 Celebrating the authentic culinary heritage of Odisha.
                 Handcrafted traditional Pithas, slow-baked Poda Pitha, and

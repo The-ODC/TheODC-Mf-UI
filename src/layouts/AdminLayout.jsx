@@ -27,6 +27,7 @@ import {
   FastfoodTwoTone,
   DeliveryDiningTwoTone,
   PaymentsTwoTone,
+  ContactMailTwoTone,
   SupportAgentTwoTone,
   DarkMode,
   LightMode,
@@ -47,6 +48,7 @@ function AdminLayout({
   profileData,
   openLogoutDialog,
   handleLogout,
+  menuItems = [],
 }) {
   // // initial state
   const drawerWidth = 270;
@@ -62,7 +64,7 @@ function AdminLayout({
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
 
-  const menuItems = [
+  const defaultMenuItems = [
     { text: "Dashboard", icon: <DashboardTwoTone />, path: "/" },
     {
       text: "User Management",
@@ -84,7 +86,17 @@ function AdminLayout({
       icon: <PaymentsTwoTone />,
       path: "/payment-management",
     },
+    {
+      text: "Contact Inquiries",
+      icon: <ContactMailTwoTone />,
+      path: "/inquiries",
+    },
   ];
+
+  const navigationItems =
+    Array.isArray(menuItems) && menuItems.length > 0
+      ? menuItems
+      : defaultMenuItems;
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -130,7 +142,7 @@ function AdminLayout({
         }}
       />
       <List>
-        {menuItems.map((menu) => (
+        {navigationItems.map((menu) => (
           <NavLink
             key={menu.text}
             to={menu.path}
@@ -364,10 +376,17 @@ function AdminLayout({
 
 AdminLayout.propTypes = {
   children: PropTypes.node.isRequired,
-  version: PropTypes.string.isRequired || PropTypes.number.isRequired,
-  profileData: PropTypes.object.isRequired,
+  version: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  profileData: PropTypes.object,
   openLogoutDialog: PropTypes.func,
   handleLogout: PropTypes.func,
+  menuItems: PropTypes.arrayOf(
+    PropTypes.shape({
+      text: PropTypes.string.isRequired,
+      icon: PropTypes.node,
+      path: PropTypes.string.isRequired,
+    })
+  ),
 };
 
 export default AdminLayout;

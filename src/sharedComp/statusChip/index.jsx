@@ -25,6 +25,11 @@ const statusMapping = {
   success: { label: "Success", color: "success" },
   failed: { label: "Failed", color: "error" },
   refunded: { label: "Refunded", color: "default" },
+
+  // Inquiry Statuses
+  new: { label: "New", color: "error" },
+  contacted: { label: "Contacted", color: "warning" },
+  resolved: { label: "Resolved", color: "success" },
 };
 
 function StatusChip({ status, variant = "contained", size = "small" }) {
