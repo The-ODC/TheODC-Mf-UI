@@ -2,129 +2,78 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 <Meta title="Theme/Theme" />
 
-# 🎨 Theme System (MUI + Context)
+# 🎨 The ODC Design System & Tokens
 
-Your app uses a custom MUI theme system with a `ThemeContext`, `ThemeProviderWrapper`, and utility functions to support both **light** and **dark** modes using a shared color palette.
-
----
-
-## ✳️ Exported Items
-
-- `COLORS` — Central color tokens used across the theme
-- `getTheme(mode)` — Returns a full MUI theme object based on `"light"` or `"dark"`
-- `ThemeContext` — React Context for accessing theme mode and toggle function
-- `ThemeProviderWrapper` — Provides the theme and context to your app
+A comprehensive design system built with custom Material UI (MUI v7) tokens, semantic palettes, responsive typography, and dual light/dark modes tailored for **OdBites / The ODC**.
 
 ---
 
-## 🎨 `COLORS`
+## 🌈 Core Brand Color Tokens
 
-A consistent token-based color system used in both light and dark themes.
-
-```js
-import COLORS from "./colors";
-
-console.log(COLORS.PRIMARY); // "#FF6B35"
-```
-
-Some available colors:
-
-```
-| Token               | Example   |
-| ------------------- | --------- |
-| `PRIMARY`           | `#FF6B35` |
-| `SECONDARY`         | `#354aff` |
-| `ERROR`             | `#E63946` |
-| `LIGHT_BG`          | `#f7f7f7` |
-| `DARK_TEXT_PRIMARY` | `#E0E0E0` |
-```
+| Token Key | HEX Code | Role / Usage |
+| :--- | :--- | :--- |
+| **`PRIMARY`** | `#E25822` | Terracotta Flame Orange (CTA buttons, key highlights) |
+| **`PRIMARY_HOVER`** | `#C84412` | Hover & active state on primary elements |
+| **`PRIMARY_LIGHT`** | `#F58245` | Subtle gradient & focus states |
+| **`SECONDARY`** | `#6E3917` | Koraput Coffee & Earthen Clay Brown |
+| **`WARNING`** | `#E59819` | Warm Jaggery Gold (Pending orders, caution alerts) |
+| **`SUCCESS`** | `#2D8A4E` | Herbal Leaf Green (Delivered orders, active status) |
+| **`ERROR`** | `#D32F2F` | Warm Crimson (Out of stock, payment failures) |
+| **`INFO`** | `#1E88E5` | Ocean Blue (In transit, system notices) |
 
 ---
 
-## ⚙️ `getTheme(mode)`
+## 🌓 Surface & Background Tokens
 
-Returns a full responsive Material UI theme customized for light or dark mode.
+### Light Theme
+- **`LIGHT_BG`**: `#FAF5EE` (Warm Linen Ivory)
+- **`LIGHT_PAPER`**: `#FFFFFF` (Crisp White Card Surface)
+- **`LIGHT_TEXT_PRIMARY`**: `#1D130C` (Deep Espresso Text)
+- **`LIGHT_TEXT_SECONDARY`**: `#6E6259` (Warm Earth Slate)
+- **`LIGHT_DIVIDER`**: `#E8DFD3`
 
-```js
-import { getTheme } from "./theme";
-
-const theme = getTheme("light");
-```
-
-- Uses responsive font sizes
-- Supports all standard MUI palette keys: `primary`, `secondary`, `error`, `success`, etc.
-- Typography and spacing are customized
-- Overrides many MUI components (e.g. `MuiButton`, `MuiCard`, `MuiTextField`)
-
----
-
-## 🧠 `ThemeContext`
-
-React context with two values:
-
-```js
-const { mode, toggleTheme } = useContext(ThemeContext);
-```
-
-- `mode`: `"light"` or `"dark"`
-- `toggleTheme`: Function to switch between modes
+### Dark Theme
+- **`DARK_BG`**: `#14110F` (Dark Roast Espresso)
+- **`DARK_PAPER`**: `#201A16` (Warm Charcoal Clay Surface)
+- **`DARK_TEXT_PRIMARY`**: `#FAF5EE` (Warm Linen Ivory Text)
+- **`DARK_TEXT_SECONDARY`**: `#A89F91` (Warm Silver Tan)
+- **`DARK_DIVIDER`**: `#2E2620`
 
 ---
 
-## 🧥 `ThemeProviderWrapper`
+## 📦 Usage & Integration
 
-Wraps your app and provides the theme context and styling.
+### 1. Theme Provider Wrapper
+Wrap your root application in `ThemeProviderWrapper`:
 
 ```jsx
-import { ThemeProviderWrapper } from "./ThemeProviderWrapper";
+import { ThemeProviderWrapper } from "TheOdcMfUI/theme";
 
-<ThemeProviderWrapper>
-  <App />
-</ThemeProviderWrapper>;
+export default function App() {
+  return (
+    <ThemeProviderWrapper>
+      <YourAppRoutes />
+    </ThemeProviderWrapper>
+  );
+}
 ```
 
-It supports an optional `mode` prop and reads `"user_theme"` from cookies if not provided.
+### 2. Access Theme Context & Switcher
+Use `ThemeContext` to reactively read or switch modes:
 
 ```jsx
-<ThemeProviderWrapper mode="light">
-  <App />
-</ThemeProviderWrapper>
-```
-
----
-
-## 💡 Theme Switch Example
-
-```js
 import React, { useContext } from "react";
-import { ThemeContext } from "./ThemeProviderWrapper";
-import { Button } from "@mui/material";
+import { ThemeContext } from "TheOdcMfUI/theme";
+import { IconButton } from "@mui/material";
+import { DarkMode, LightMode } from "@mui/icons-material";
 
-const ThemeToggleButton = () => {
+export const ThemeSwitch = () => {
   const { mode, toggleTheme } = useContext(ThemeContext);
 
   return (
-    <Button onClick={toggleTheme}>
-      Switch to {mode === "light" ? "Dark" : "Light"} Mode
-    </Button>
+    <IconButton onClick={toggleTheme} color="inherit">
+      {mode === "dark" ? <LightMode /> : <DarkMode />}
+    </IconButton>
   );
 };
 ```
-
----
-
-## 📦 Cookie Integration
-
-- Reads the cookie `user_theme` (light/dark) on load.
-- Stores theme preference using cookie helpers.
-
----
-
-## 📚 Related Files
-
-- `/theme/colors.js`
-- `/theme/theme.js`
-- `/theme/ThemeProviderWrapper.js`
-- `/utility/cookies.js`
-
----

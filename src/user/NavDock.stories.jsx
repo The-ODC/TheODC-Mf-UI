@@ -10,8 +10,19 @@ export default {
       defaultViewport: "iphonese",
     },
   },
+  argTypes: {
+    isAuthenticated: { control: "boolean" },
+  },
 };
 
-export const Default = {
-  args: {},
+export const Guest = {
+  args: {
+    isAuthenticated: false,
+  },
+};
+
+export const Authenticated = {
+  args: {
+    isAuthenticated: true,
+  },
 };

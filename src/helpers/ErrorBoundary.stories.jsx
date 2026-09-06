@@ -1,7 +1,7 @@
 import ErrorBoundary from "./ErrorBoundary";
 
 export default {
-  title: "helpers/ErrorBoundary",
+  title: "Helpers/ErrorBoundary",
   component: ErrorBoundary,
   tags: ["autodocs"],
   parameters: {

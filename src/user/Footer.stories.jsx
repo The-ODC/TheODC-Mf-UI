@@ -7,8 +7,19 @@ export default {
   parameters: {
     layout: "fullscreen",
   },
+  argTypes: {
+    isAuthenticated: { control: "boolean" },
+  },
 };
 
-export const Default = {
-  args: {},
+export const GuestUser = {
+  args: {
+    isAuthenticated: false,
+  },
+};
+
+export const AuthenticatedUser = {
+  args: {
+    isAuthenticated: true,
+  },
 };
