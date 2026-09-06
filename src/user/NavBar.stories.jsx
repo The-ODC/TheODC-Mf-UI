@@ -7,18 +7,32 @@ export default {
   parameters: {
     layout: "fullscreen",
   },
+  argTypes: {
+    version: { control: "text" },
+    isAuthenticated: { control: "boolean" },
+    cartCount: { control: "number" },
+  },
 };
 
-const Template = (args) => <NavBar {...args} />;
-
-export const Default = Template.bind({});
-Default.args = {
-  version: "1.0.0",
-  profileData: {
-    folderLocation: "https://i.pravatar.cc/150",
-    profilePicture: "",
-    firstName: "Jane",
-    lastName: "Doe",
+export const Authenticated = {
+  args: {
+    version: "1.2.0",
+    isAuthenticated: true,
+    cartCount: 3,
+    profileData: {
+      firstName: "Aarav",
+      lastName: "Patel",
+      email: "aarav.patel@example.com",
+    },
+    openLogoutDialog: () => alert("Logout dialog prompted"),
   },
-  openLogoutDialog: () => alert("Logout requested"),
+};
+
+export const Guest = {
+  args: {
+    version: "1.2.0",
+    isAuthenticated: false,
+    cartCount: 0,
+    openLogoutDialog: () => {},
+  },
 };

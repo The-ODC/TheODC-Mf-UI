@@ -1,46 +1,65 @@
 import React from "react";
+import { Button, Stack } from "@mui/material";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 import NoData from "./NoData";
 
 export default {
-  title: "helpers/NoData",
+  title: "Helpers/NoData",
   component: NoData,
   tags: ["autodocs"],
   parameters: {
     docs: {
       description: {
         component: `
-### 📭 NoData
-A reusable component to show a friendly "No Data Found" UI with an icon, title, and optional description.
+### 📭 NoData Empty State
+A reusable component to show a friendly, polished empty state UI with an SVG illustration, title, description, and optional Call-to-Action buttons.
 
 #### 📦 Import
 \`\`\`js
-import { RenderIf, NoData } from "TheOdcMfUI/helpers";
+import { NoData } from "TheOdcMfUI/helpers";
 \`\`\`
-
-#### 🛠️ Props
-- **title** \`string\` – Main heading (default: "No Data Found")
-- **description** \`string\` – Optional subtitle
-- **children** \`ReactNode\` – Optional extra content (e.g., a CTA button or illustration)
-
-> Commonly used when tables, lists, or charts have no data to display.
         `,
       },
     },
   },
 };
 
-export const Default = {
+export const EmptySearch = {
   args: {
-    title: "No Data Found",
-    description: "We couldn’t find anything matching your filters.",
-    children: null,
+    title: "No Cuisines Found",
+    description:
+      "We couldn't find any dishes matching your dietary and price filters. Try resetting your search.",
+    children: (
+      <Button variant="outlined" startIcon={<RefreshIcon />} sx={{ mt: 2 }}>
+        Reset All Filters
+      </Button>
+    ),
   },
 };
 
-export const WithCTA = {
+export const EmptyCart = {
   args: {
-    title: "No Orders Yet",
-    description: "Start receiving orders to see them listed here.",
-    children: <button>Explore Products</button>,
+    title: "Your Cart is Empty",
+    description:
+      "Looks like you haven't added any mouth-watering dishes to your cart yet.",
+    children: (
+      <Button
+        variant="contained"
+        startIcon={<RestaurantMenuIcon />}
+        sx={{ mt: 2 }}
+      >
+        Explore Today's Specials
+      </Button>
+    ),
+  },
+};
+
+export const NoOrders = {
+  args: {
+    title: "No Orders Placed Yet",
+    description:
+      "Once you place an order, live tracking details and receipt summaries will appear here.",
   },
 };

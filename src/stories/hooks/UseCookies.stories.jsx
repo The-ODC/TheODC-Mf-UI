@@ -2,128 +2,230 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
+  Card,
+  CardContent,
+  Chip,
+  Grid2 as Grid,
   Paper,
   Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   TextField,
   Typography,
 } from "@mui/material";
 import { useCookies } from "../../hooks";
 
-const Demo = () => {
+const CookiesDemo = () => {
   const { getCookie, setCookie, removeCookie, cookies } = useCookies();
-  const [name, setName] = useState("demo_cookie");
-  const [value, setValue] = useState("");
-  const [result, setResult] = useState("");
+  const [name, setName] = useState("auth_session");
+  const [value, setValue] = useState("token_abc123xyz");
+  const [statusMsg, setStatusMsg] = useState("");
 
   useEffect(() => {
-    setCookie("example_token", "123456", { maxAgeMinutes: 10 });
+    setCookie("user_role", "admin", { maxAgeMinutes: 60 });
+    setCookie("cart_id", "cart_998811", { maxAgeMinutes: 120 });
   }, [setCookie]);
 
+  const cookieEntries = Object.entries(cookies || {});
+
   return (
-    <Box sx={{ p: 4, maxWidth: 700 }}>
-      <Typography variant="h5" gutterBottom>
-        useCookies Hook Demo
-      </Typography>
-      <Typography sx={{ mb: 3 }}>
-        Interact with cookies using a simple UI, then inspect the hook state
-        directly in Storybook.
-      </Typography>
-
-      <Stack spacing={3}>
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-          <TextField
-            label="Cookie name"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            fullWidth
-          />
-          <TextField
-            label="Cookie value"
-            value={value}
-            onChange={(event) => setValue(event.target.value)}
-            fullWidth
+    <Box sx={{ maxWidth: 900, p: 2 }}>
+      {/* Header */}
+      <Box sx={{ mb: 3 }}>
+        <Stack direction="row" alignItems="center" spacing={1.5} sx={{ mb: 1 }}>
+          <Typography variant="h4" sx={{ fontWeight: 700 }}>
+            useCookies Hook
+          </Typography>
+          <Chip
+            label="React Hook"
+            color="primary"
+            size="small"
+            sx={{ fontWeight: 600 }}
           />
         </Stack>
+        <Typography variant="body1" color="text.secondary">
+          Manage document cookies with reactive state updates, automatic
+          expiration calculation, and path scoping.
+        </Typography>
+      </Box>
 
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-          <Button
-            variant="contained"
-            onClick={() => {
-              setCookie(name || "demo_cookie", value);
-              setResult(`Set ${name || "demo_cookie"}`);
-            }}
-          >
-            Set cookie
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={() =>
-              setResult(getCookie(name || "demo_cookie") || "Not found")
-            }
-          >
-            Read cookie
-          </Button>
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={() => {
-              removeCookie(name || "demo_cookie");
-              setResult(`Removed ${name || "demo_cookie"}`);
-            }}
-          >
-            Remove cookie
-          </Button>
-        </Stack>
+      <Grid container spacing={3}>
+        {/* Actions Card */}
+        <Grid size={{ xs: 12, md: 5 }}>
+          <Card variant="outlined" sx={{ borderRadius: 2 }}>
+            <CardContent>
+              <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
+                Cookie Manager Actions
+              </Typography>
+              <Stack spacing={2}>
+                <TextField
+                  label="Cookie Name"
+                  size="small"
+                  fullWidth
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+                <TextField
+                  label="Cookie Value"
+                  size="small"
+                  fullWidth
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                />
+                <Stack spacing={1}>
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      if (!name) return;
+                      setCookie(name, value, { maxAgeMinutes: 60 });
+                      setStatusMsg(`✅ Successfully set cookie: "${name}"`);
+                    }}
+                  >
+                    Set Cookie (60m)
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    onClick={() => {
+                      if (!name) return;
+                      const val = getCookie(name);
+                      setStatusMsg(
+                        val
+                          ? `🔍 Found "${name}": ${val}`
+                          : `⚠️ Cookie "${name}" not found`
+                      );
+                    }}
+                  >
+                    Read Cookie
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => {
+                      if (!name) return;
+                      removeCookie(name);
+                      setStatusMsg(`🗑️ Removed cookie: "${name}"`);
+                    }}
+                  >
+                    Remove Cookie
+                  </Button>
+                </Stack>
 
-        <Paper sx={{ p: 3, bgcolor: "background.paper" }}>
-          <Typography variant="subtitle2" gutterBottom>
-            Result
-          </Typography>
-          <Typography>
-            {result || "Press a button to interact with cookies."}
-          </Typography>
-        </Paper>
+                {statusMsg && (
+                  <Paper
+                    sx={{
+                      p: 1.5,
+                      bgcolor: "background.paper",
+                      borderRadius: 1,
+                    }}
+                  >
+                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                      {statusMsg}
+                    </Typography>
+                  </Paper>
+                )}
+              </Stack>
+            </CardContent>
+          </Card>
+        </Grid>
 
-        <Paper sx={{ p: 3, bgcolor: "background.paper" }}>
-          <Typography variant="subtitle2" gutterBottom>
-            Current cookie state
-          </Typography>
-          <Typography component="pre" sx={{ whiteSpace: "pre-wrap", m: 0 }}>
-            {JSON.stringify(cookies, null, 2)}
-          </Typography>
-        </Paper>
-      </Stack>
+        {/* Live Active Cookies Table */}
+        <Grid size={{ xs: 12, md: 7 }}>
+          <Card variant="outlined" sx={{ borderRadius: 2, height: "100%" }}>
+            <CardContent>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+                sx={{ mb: 2 }}
+              >
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                  Active Cookies State
+                </Typography>
+                <Chip
+                  label={`${cookieEntries.length} Active`}
+                  color="success"
+                  size="small"
+                />
+              </Stack>
+
+              <TableContainer
+                component={Paper}
+                variant="outlined"
+                sx={{ borderRadius: 1.5 }}
+              >
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: 700 }}>Key</TableCell>
+                      <TableCell sx={{ fontWeight: 700 }}>Value</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 700 }}>
+                        Action
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {cookieEntries.length === 0 ? (
+                      <TableRow>
+                        <TableCell
+                          colSpan={3}
+                          align="center"
+                          sx={{ py: 3, color: "text.secondary" }}
+                        >
+                          No cookies currently stored in document.
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      cookieEntries.map(([k, v]) => (
+                        <TableRow key={k}>
+                          <TableCell
+                            sx={{ fontFamily: "monospace", fontWeight: 600 }}
+                          >
+                            {k}
+                          </TableCell>
+                          <TableCell
+                            sx={{
+                              fontFamily: "monospace",
+                              color: "primary.main",
+                            }}
+                          >
+                            {String(v)}
+                          </TableCell>
+                          <TableCell align="right">
+                            <Button
+                              size="small"
+                              color="error"
+                              onClick={() => {
+                                removeCookie(k);
+                                setStatusMsg(`🗑️ Removed "${k}"`);
+                              }}
+                            >
+                              Delete
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
     </Box>
   );
 };
 
 export default {
   title: "Hooks/useCookies",
-  component: Demo,
+  component: CookiesDemo,
   tags: ["autodocs"],
-  parameters: {
-    docs: {
-      description: {
-        component: `
-🔐 **useCookies Hook**
-A custom React hook to manage cookies easily. Provides utility functions to get, set, and remove cookies.
-
-#### 📦 Import
-\`\`\`js
-import { useCookies } from "TheOdcMfUI/hooks";
-\`\`\`
-
-## ✅ Returns
-- \`getCookie(name: string)\` → Gets the cookie value.
-- \`setCookie(name: string, value: string, options?)\` → Sets a cookie with optional config.
-- \`removeCookie(name: string)\` → Deletes the cookie.
-- \`cookies: Record<string, string>\` → All cookies as key-value pairs.
-        `,
-      },
-    },
-  },
 };
 
-export const Default = {
-  render: () => <Demo />,
+export const LivePlayground = {
+  render: () => <CookiesDemo />,
 };

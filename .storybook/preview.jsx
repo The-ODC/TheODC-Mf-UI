@@ -49,11 +49,16 @@ export const parameters = {
   options: {
     storySort: {
       order: [
-        "Introduction",
         "Documentation",
+        "Theme",
         "Layouts",
+        "User",
+        "SharedComponents",
         "Components",
-        "Pages",
+        "Hooks",
+        "Helpers",
+        "HOC",
+        "Utility",
       ],
     },
   },
