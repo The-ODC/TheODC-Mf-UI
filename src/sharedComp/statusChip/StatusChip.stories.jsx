@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Stack, Grid2 as Grid } from "@mui/material";
+import { Box, Typography, Stack, Grid } from "@mui/material";
 import StatusChip from "./index";
 
 export default {

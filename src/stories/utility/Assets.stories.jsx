@@ -4,7 +4,7 @@ import {
   Card,
   CardContent,
   Chip,
-  Grid2 as Grid,
+  Grid,
   Paper,
   Stack,
   TextField,
@@ -140,4 +140,20 @@ export default {
 
 export const LivePlayground = {
   render: () => <AssetsDemo />,
+  parameters: {
+    docs: {
+      source: {
+        code: `import { buildAssetUrl } from "TheOdcMfUI/utility/assets";
+
+const assetUrl = buildAssetUrl({
+  baseUrl: "https://cdn.odbites.com",
+  folderLocation: "menu-items/pizzas",
+  fileName: "margherita_deluxe.webp",
+});
+
+console.log(assetUrl);
+// -> "https://cdn.odbites.com/menu-items/pizzas/margherita_deluxe.webp"`,
+      },
+    },
+  },
 };

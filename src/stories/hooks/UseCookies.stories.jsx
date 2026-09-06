@@ -5,7 +5,7 @@ import {
   Card,
   CardContent,
   Chip,
-  Grid2 as Grid,
+  Grid,
   Paper,
   Stack,
   Table,
@@ -228,4 +228,26 @@ export default {
 
 export const LivePlayground = {
   render: () => <CookiesDemo />,
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useCookies } from "TheOdcMfUI/hooks";
+
+function UserSession() {
+  const { getCookie, setCookie, removeCookie, cookies } = useCookies();
+
+  // Set a session cookie with 60-minute expiry
+  const handleLogin = (token) => {
+    setCookie("auth_session", token, { maxAgeMinutes: 60 });
+  };
+
+  const handleLogout = () => {
+    removeCookie("auth_session");
+  };
+
+  const currentToken = getCookie("auth_session");
+}`,
+      },
+    },
+  },
 };

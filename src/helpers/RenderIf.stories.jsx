@@ -1,75 +1,77 @@
-import React, { useState } from "react";
-import {
-  Alert,
-  Box,
-  FormControlLabel,
-  Paper,
-  Switch,
-  Typography,
-} from "@mui/material";
+import React from "react";
+import { Alert, Box } from "@mui/material";
 import RenderIf from "./RenderIf";
-
-const InteractiveRenderIfDemo = () => {
-  const [isAdmin, setIsAdmin] = useState(true);
-  const [hasDiscount, setHasDiscount] = useState(false);
-
-  return (
-    <Box sx={{ maxWidth: 650, p: 2 }}>
-      <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
-        Conditional Rendering with RenderIf
-      </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-        Declarative conditional wrapper that renders children only when `render`
-        is truthy, keeping JSX clean without complex ternary nesting.
-      </Typography>
-
-      <Paper sx={{ p: 2.5, mb: 3 }}>
-        <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-          Toggle Component States:
-        </Typography>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={isAdmin}
-              onChange={(e) => setIsAdmin(e.target.checked)}
-            />
-          }
-          label="Admin Privileges (render admin actions)"
-        />
-        <FormControlLabel
-          control={
-            <Switch
-              checked={hasDiscount}
-              onChange={(e) => setHasDiscount(e.target.checked)}
-            />
-          }
-          label="Active Promotion (render discount banner)"
-        />
-      </Paper>
-
-      <RenderIf render={isAdmin}>
-        <Alert severity="info" sx={{ mb: 2 }}>
-          🔒 <strong>Admin Panel Access Enabled:</strong> You have elevated
-          permissions to edit restaurant menus and view live logs.
-        </Alert>
-      </RenderIf>
-
-      <RenderIf render={hasDiscount}>
-        <Alert severity="success">
-          🎉 <strong>Special Promo Code Applied:</strong> 20% discount will be
-          applied at checkout automatically!
-        </Alert>
-      </RenderIf>
-    </Box>
-  );
-};
 
 export default {
   title: "Helpers/RenderIf",
-  component: InteractiveRenderIfDemo,
+  component: RenderIf,
   tags: ["autodocs"],
+  argTypes: {
+    render: {
+      control: "boolean",
+      description:
+        "Controls whether the wrapped children are rendered or hidden",
+    },
+    children: {
+      control: false,
+      description: "React elements or text to be conditionally rendered",
+    },
+  },
+  parameters: {
+    docs: {
+      description: {
+        component: `
+### 🧩 RenderIf
+A clean, declarative utility wrapper that conditionally renders its \`children\` based on a boolean \`render\` prop without messy nested ternaries.
+
+#### 📦 Import
+\`\`\`js
+import { RenderIf } from "TheOdcMfUI/helpers";
+\`\`\`
+
+#### 💡 Usage
+\`\`\`jsx
+<RenderIf render={isUserLoggedIn}>
+  <UserDashboard />
+</RenderIf>
+\`\`\`
+        `,
+      },
+    },
+  },
 };
 
-export const LivePlayground = {
-  render: () => <InteractiveRenderIfDemo />,
+export const RenderVisible = {
+  args: {
+    render: true,
+    children: (
+      <Alert severity="success">
+        🎉 <strong>Special Promo Code Applied:</strong> 20% discount will be
+        applied at checkout!
+      </Alert>
+    ),
+  },
+};
+
+export const AdminAccessBanner = {
+  args: {
+    render: true,
+    children: (
+      <Alert severity="info">
+        🔒 <strong>Admin Access Granted:</strong> You have elevated permissions
+        to edit live restaurant menus.
+      </Alert>
+    ),
+  },
+};
+
+export const HiddenState = {
+  args: {
+    render: false,
+    children: (
+      <Alert severity="warning">
+        This banner is hidden because <code>render=false</code>.
+      </Alert>
+    ),
+  },
 };

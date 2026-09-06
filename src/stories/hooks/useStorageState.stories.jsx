@@ -5,7 +5,7 @@ import {
   Card,
   CardContent,
   Chip,
-  Grid2 as Grid,
+  Grid,
   Paper,
   Stack,
   TextField,
@@ -215,4 +215,25 @@ export default {
 
 export const LivePlayground = {
   render: () => <StorageDemo />,
+  parameters: {
+    docs: {
+      source: {
+        code: `import { useStorageState } from "TheOdcMfUI/hooks";
+
+// 1. LocalStorage Sync (Persists across browser restarts)
+const [theme, setTheme, resetTheme, removeTheme] = useStorageState(
+  "odbites_user_theme",
+  "dark",
+  { storage: "local" }
+);
+
+// 2. SessionStorage Sync (Persists only for current tab session)
+const [category, setCategory] = useStorageState(
+  "odbites_active_category",
+  "all",
+  { storage: "session" }
+);`,
+      },
+    },
+  },
 };

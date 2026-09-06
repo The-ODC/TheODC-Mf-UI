@@ -7,7 +7,7 @@ import {
   CardContent,
   Chip,
   Divider,
-  Grid2 as Grid,
+  Grid,
   Paper,
   Stack,
   Tab,
@@ -293,4 +293,25 @@ import {
 
 export const LivePlayground = {
   render: () => <HttpPlayground />,
+  parameters: {
+    docs: {
+      source: {
+        code: `import {
+  getApiErrorMessage,
+  getApiErrorStatus,
+} from "TheOdcMfUI/utility/http";
+
+try {
+  await axios.get("/api/customer/orders");
+} catch (error) {
+  // Extracts user-friendly error message from server response or network error
+  const userMessage = getApiErrorMessage(error);
+  const statusCode = getApiErrorStatus(error);
+
+  console.error(\`Request failed [\${statusCode}]: \${userMessage}\`);
+  toast.error(userMessage);
+}`,
+      },
+    },
+  },
 };
