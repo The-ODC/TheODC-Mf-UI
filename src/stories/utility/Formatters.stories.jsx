@@ -395,7 +395,7 @@ export default {
     docs: {
       description: {
         component: `
-### 🛠️ OdBites Formatter Utilities
+### 🛠️ The ODC Formatter Utilities
 A complete suite of pure utility functions for consistently formatting currencies, dates, times, initials, addresses, and model keys across all micro-frontends.
 
 #### 📦 Import

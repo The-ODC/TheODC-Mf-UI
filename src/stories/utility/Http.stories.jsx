@@ -87,7 +87,7 @@ const standardErrors = [
     color: "error",
     error: {
       code: "ECONNABORTED",
-      message: "Network Error: Unable to connect to OdBites API gateway.",
+      message: "Network Error: Unable to connect to The ODC API gateway.",
     },
   },
 ];

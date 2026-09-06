@@ -4,28 +4,29 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 # 🎨 The ODC Design System & Tokens
 
-A comprehensive design system built with custom Material UI (MUI v7) tokens, semantic palettes, responsive typography, and dual light/dark modes tailored for **OdBites / The ODC**.
+A comprehensive design system built with custom Material UI (MUI v7) tokens, semantic palettes, responsive typography, and dual light/dark modes tailored for **The ODC / The ODC**.
 
 ---
 
 ## 🌈 Core Brand Color Tokens
 
-| Token Key | HEX Code | Role / Usage |
-| :--- | :--- | :--- |
-| **`PRIMARY`** | `#E25822` | Terracotta Flame Orange (CTA buttons, key highlights) |
-| **`PRIMARY_HOVER`** | `#C84412` | Hover & active state on primary elements |
-| **`PRIMARY_LIGHT`** | `#F58245` | Subtle gradient & focus states |
-| **`SECONDARY`** | `#6E3917` | Koraput Coffee & Earthen Clay Brown |
-| **`WARNING`** | `#E59819` | Warm Jaggery Gold (Pending orders, caution alerts) |
-| **`SUCCESS`** | `#2D8A4E` | Herbal Leaf Green (Delivered orders, active status) |
-| **`ERROR`** | `#D32F2F` | Warm Crimson (Out of stock, payment failures) |
-| **`INFO`** | `#1E88E5` | Ocean Blue (In transit, system notices) |
+| Token Key           | HEX Code  | Role / Usage                                          |
+| :------------------ | :-------- | :---------------------------------------------------- |
+| **`PRIMARY`**       | `#E25822` | Terracotta Flame Orange (CTA buttons, key highlights) |
+| **`PRIMARY_HOVER`** | `#C84412` | Hover & active state on primary elements              |
+| **`PRIMARY_LIGHT`** | `#F58245` | Subtle gradient & focus states                        |
+| **`SECONDARY`**     | `#6E3917` | Koraput Coffee & Earthen Clay Brown                   |
+| **`WARNING`**       | `#E59819` | Warm Jaggery Gold (Pending orders, caution alerts)    |
+| **`SUCCESS`**       | `#2D8A4E` | Herbal Leaf Green (Delivered orders, active status)   |
+| **`ERROR`**         | `#D32F2F` | Warm Crimson (Out of stock, payment failures)         |
+| **`INFO`**          | `#1E88E5` | Ocean Blue (In transit, system notices)               |
 
 ---
 
 ## 🌓 Surface & Background Tokens
 
 ### Light Theme
+
 - **`LIGHT_BG`**: `#FAF5EE` (Warm Linen Ivory)
 - **`LIGHT_PAPER`**: `#FFFFFF` (Crisp White Card Surface)
 - **`LIGHT_TEXT_PRIMARY`**: `#1D130C` (Deep Espresso Text)
@@ -33,6 +34,7 @@ A comprehensive design system built with custom Material UI (MUI v7) tokens, sem
 - **`LIGHT_DIVIDER`**: `#E8DFD3`
 
 ### Dark Theme
+
 - **`DARK_BG`**: `#14110F` (Dark Roast Espresso)
 - **`DARK_PAPER`**: `#201A16` (Warm Charcoal Clay Surface)
 - **`DARK_TEXT_PRIMARY`**: `#FAF5EE` (Warm Linen Ivory Text)
@@ -44,6 +46,7 @@ A comprehensive design system built with custom Material UI (MUI v7) tokens, sem
 ## 📦 Usage & Integration
 
 ### 1. Theme Provider Wrapper
+
 Wrap your root application in `ThemeProviderWrapper`:
 
 ```jsx
@@ -59,6 +62,7 @@ export default function App() {
 ```
 
 ### 2. Access Theme Context & Switcher
+
 Use `ThemeContext` to reactively read or switch modes:
 
 ```jsx

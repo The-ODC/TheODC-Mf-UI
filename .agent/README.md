@@ -1,10 +1,10 @@
-# OdBites MF UI Agent Notes
+# The ODC MF UI Agent Notes
 
 This folder is the shared UI remote repo-local context for future agents.
 
 ## Purpose
 
-`OdBites-Mf-UI` is the module-federated shared UI package. It owns layouts,
+`The ODC-Mf-UI` is the module-federated shared UI package. It owns layouts,
 theme, reusable components, helpers, hooks, utilities, assets, and Storybook.
 
 ## Stack

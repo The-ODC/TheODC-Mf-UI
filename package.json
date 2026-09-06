@@ -11,7 +11,7 @@
     "format": "prettier --write .",
     "prepare": "husky install",
     "preview": "vite preview",
-    "mf-start": "concurrently \"vite build --watch\" \"vite preview\"",
+    "mf-start": "vite build && concurrently \"vite build --watch\" \"vite preview\"",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "clear-cache": "rd /s /q node_modules\\.cache\\storybook & rd /s /q node_modules\\.vite"

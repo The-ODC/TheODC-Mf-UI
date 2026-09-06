@@ -18,7 +18,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import { buildAssetUrl } from "../../utility/assets";
 
 const AssetsDemo = () => {
-  const [baseUrl, setBaseUrl] = useState("https://cdn.odbites.com");
+  const [baseUrl, setBaseUrl] = useState("https://cdn.theodc.com");
   const [folderLocation, setFolderLocation] = useState("menu-items/pizzas");
   const [fileName, setFileName] = useState("margherita_deluxe.webp");
   const [copied, setCopied] = useState(false);
@@ -146,13 +146,13 @@ export const LivePlayground = {
         code: `import { buildAssetUrl } from "TheOdcMfUI/utility/assets";
 
 const assetUrl = buildAssetUrl({
-  baseUrl: "https://cdn.odbites.com",
+  baseUrl: "https://cdn.theodc.com",
   folderLocation: "menu-items/pizzas",
   fileName: "margherita_deluxe.webp",
 });
 
 console.log(assetUrl);
-// -> "https://cdn.odbites.com/menu-items/pizzas/margherita_deluxe.webp"`,
+// -> "https://cdn.theodc.com/menu-items/pizzas/margherita_deluxe.webp"`,
       },
     },
   },

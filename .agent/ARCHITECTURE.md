@@ -32,9 +32,9 @@ React, React DOM, MUI, Emotion, React Router, PropTypes, React Hook Form,
 
 ## Runtime Consumers
 
-- `OdBites-Admin-FE` imports layouts, theme, shared form controls, helpers,
+- `The ODC-Admin-FE` imports layouts, theme, shared form controls, helpers,
   hooks, HOCs, and cookie utilities.
-- `OdBites-User-FE` imports user layout/theme/shared helpers from this remote.
+- `The ODC-User-FE` imports user layout/theme/shared helpers from this remote.
 
 ## Ownership
 

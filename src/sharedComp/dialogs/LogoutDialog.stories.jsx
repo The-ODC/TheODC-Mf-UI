@@ -40,7 +40,7 @@ const Template = (args) => {
 
 export const Default = Template.bind({});
 Default.args = {
-  title: "Sign Out of OdBites",
+  title: "Sign Out of The ODC",
   description:
     "Are you sure you want to end your active session? Any items currently in guest checkout will be preserved.",
   confirmLabel: "Sign Out",

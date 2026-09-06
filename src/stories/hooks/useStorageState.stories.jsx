@@ -15,13 +15,13 @@ import { useStorageState } from "../../hooks/useStorageState";
 
 const StorageDemo = () => {
   const [themePreference, setThemePreference, , removeTheme] = useStorageState(
-    "odbites_user_theme",
+    "theodc_user_theme",
     "dark",
     { storage: "local" }
   );
 
   const [filterState, setFilterState, , removeFilter] = useStorageState(
-    "odbites_category_filter",
+    "theodc_category_filter",
     "all-cuisines",
     { storage: "session" }
   );
@@ -75,7 +75,7 @@ const StorageDemo = () => {
 
               <Stack spacing={2}>
                 <TextField
-                  label="Key: 'odbites_user_theme'"
+                  label="Key: 'theodc_user_theme'"
                   size="small"
                   fullWidth
                   value={themePreference || ""}
@@ -152,7 +152,7 @@ const StorageDemo = () => {
 
               <Stack spacing={2}>
                 <TextField
-                  label="Key: 'odbites_category_filter'"
+                  label="Key: 'theodc_category_filter'"
                   size="small"
                   fullWidth
                   value={filterState || ""}
@@ -222,14 +222,14 @@ export const LivePlayground = {
 
 // 1. LocalStorage Sync (Persists across browser restarts)
 const [theme, setTheme, resetTheme, removeTheme] = useStorageState(
-  "odbites_user_theme",
+  "theodc_user_theme",
   "dark",
   { storage: "local" }
 );
 
 // 2. SessionStorage Sync (Persists only for current tab session)
 const [category, setCategory] = useStorageState(
-  "odbites_active_category",
+  "theodc_active_category",
   "all",
   { storage: "session" }
 );`,
