@@ -19,7 +19,7 @@ Supports text, select, checkbox, radio, textarea, password, phone, file upload, 
 #### 📦 Import
 
 \`\`\`js
-import { FormInput } from "OdBitesMfUI/sharedComp";
+import { FormInput } from "TheOdcMfUI/sharedComp";
 \`\`\`
 
 #### 🛠️ Props

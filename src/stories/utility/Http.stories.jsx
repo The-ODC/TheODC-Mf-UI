@@ -85,7 +85,7 @@ Use this helper to normalize API error payloads into readable messages for users
 
 #### Example
 \`\`\`js
-import { getApiErrorMessage } from "OdBitesMfUI/utility/http";
+import { getApiErrorMessage } from "TheOdcMfUI/utility/http";
 \`\`\`
         `,
       },

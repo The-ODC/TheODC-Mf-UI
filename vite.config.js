@@ -15,7 +15,7 @@ export default defineConfig({
     react(),
     svgr(),
     federation({
-      name: "OdBitesMfUI",
+      name: "TheOdcMfUI",
       filename: "remoteEntry.js",
       exposes: {
         "./sharedComp": "./src/sharedComp",

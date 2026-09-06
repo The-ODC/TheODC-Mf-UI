@@ -12,7 +12,9 @@ export {
 export {
   formatAddress,
   formatCurrency,
+  formatDate,
   formatDateTime,
+  formatTime,
   getActivePrice,
   getInitials,
   getRecordId,

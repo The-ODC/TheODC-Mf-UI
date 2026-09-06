@@ -16,7 +16,7 @@ when \`defaultValues\` change.
 
 #### 📦 Import
 \`\`\`js
-import { useFormWithReinitialize } from "OdBitesMfUI/hooks";
+import { useFormWithReinitialize } from "TheOdcMfUI/hooks";
 \`\`\`
 
 ## ✅ Options

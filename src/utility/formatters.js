@@ -68,6 +68,44 @@ export function formatDateTime(
   return new Intl.DateTimeFormat(locale, { dateStyle, timeStyle }).format(date);
 }
 
+export function formatDate(
+  value,
+  {
+    locale = "en-IN",
+    fallback = "Not available",
+    dateStyle = "medium",
+    timeStyle,
+  } = {}
+) {
+  if (!value) return fallback;
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return fallback;
+
+  const options = { dateStyle };
+  if (timeStyle) options.timeStyle = timeStyle;
+
+  return new Intl.DateTimeFormat(locale, options).format(date);
+}
+
+export function formatTime(
+  value,
+  {
+    locale = "en-IN",
+    fallback = "",
+    hour = "2-digit",
+    minute = "2-digit",
+    hour12 = true,
+  } = {}
+) {
+  if (!value) return fallback;
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return fallback;
+
+  return date.toLocaleTimeString(locale, { hour, minute, hour12 });
+}
+
 export function readableLabel(value) {
   return String(value || "")
     .replace(/([a-z])([A-Z])/g, "$1 $2")
