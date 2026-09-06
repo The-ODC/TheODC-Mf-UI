@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -110,7 +110,7 @@ A custom React hook to manage cookies easily. Provides utility functions to get,
 
 #### 📦 Import
 \`\`\`js
-import { useCookies } from "OdBitesMfUI/hooks";
+import { useCookies } from "TheOdcMfUI/hooks";
 \`\`\`
 
 ## ✅ Returns

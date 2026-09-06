@@ -13,7 +13,9 @@ const GOOGLE_FONTS_URL =
 const ThemeContext = createContext();
 
 const ThemeProviderWrapper = ({ children, mode: externalMode }) => {
-  const currentTheme = cookies.getCookie("user_theme")?.toLocaleLowerCase();
+  const appName = import.meta.env.VITE_APP_NAME || "app";
+  const THEME_COOKIE = `theODC_${appName}_theme`;
+  const currentTheme = cookies.getCookie(THEME_COOKIE)?.toLocaleLowerCase();
   const [mode, setMode] = useState(externalMode || currentTheme || "dark");
 
   useEffect(() => {
@@ -24,7 +26,7 @@ const ThemeProviderWrapper = ({ children, mode: externalMode }) => {
     Inject Google Fonts stylesheet into document head
    */
   useEffect(() => {
-    const id = "odbites-google-fonts";
+    const id = "theodc-google-fonts";
     if (!document.getElementById(id)) {
       const preconnect1 = document.createElement("link");
       preconnect1.rel = "preconnect";
@@ -46,7 +48,11 @@ const ThemeProviderWrapper = ({ children, mode: externalMode }) => {
   }, []);
 
   const toggleTheme = () => {
-    setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
+    setMode((prevMode) => {
+      const nextMode = prevMode === "light" ? "dark" : "light";
+      cookies.setCookie(THEME_COOKIE, nextMode, { maxAgeDays: 365 });
+      return nextMode;
+    });
   };
 
   const theme = useMemo(() => getTheme(mode), [mode]);

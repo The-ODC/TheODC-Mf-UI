@@ -14,7 +14,7 @@ Avatar allows users to upload and crop a profile picture using react-easy-crop.
 
 #### 📦 Import
 \`\`\`js
-import { AvatarUpload } from "OdBitesMfUI/sharedComp";
+import { AvatarUpload } from "TheOdcMfUI/sharedComp";
 \`\`\`
 
 ### Features

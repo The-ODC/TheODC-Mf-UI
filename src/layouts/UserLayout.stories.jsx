@@ -13,7 +13,7 @@ Use this layout for all user pages. It includes header, sidebar, and main conten
 
 #### 📦 Import
 \`\`\`js
-import { UserLayout } from "OdBitesMfUI/layouts";
+import { UserLayout } from "TheOdcMfUI/layouts";
 \`\`\`
 
 #### 🛠️ Props

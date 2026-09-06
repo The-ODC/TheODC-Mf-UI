@@ -13,7 +13,7 @@ const Demo = () => {
   const [value, setValue, resetValue, removeValue] = useStorageState(
     "storybook-storage",
     "default value",
-    { storage: "local" },
+    { storage: "local" }
   );
 
   const updateValue = useCallback(() => {
@@ -80,7 +80,7 @@ A React hook that stores state in browser storage and keeps the UI in sync.
 
 #### 📦 Import
 \`\`\`js
-import { useStorageState } from "OdBitesMfUI/hooks";
+import { useStorageState } from "TheOdcMfUI/hooks";
 \`\`\`
 
 #### Example usage

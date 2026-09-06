@@ -13,7 +13,7 @@ A reusable wrapper that catches runtime errors in its child components and displ
 
 #### 📦 Import
 \`\`\`js
-import { ErrorBoundary } from "OdBitesMfUI/helpers";
+import { ErrorBoundary } from "TheOdcMfUI/helpers";
 \`\`\`
 
 #### 🛠️ Props
