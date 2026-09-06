@@ -39,6 +39,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../theme/ThemeProviderWrapper";
 import { DARK_LOGO, LIGHT_LOGO } from "../assets";
 import { VITE_APP_ASSETS_PATH } from "../config/env";
+import { buildAssetUrl, getInitials } from "../utility";
 import LogoutDialog from "../sharedComp/dialogs/LogoutDialog";
 import useCookies from "../hooks/useCookies";
 
@@ -199,6 +200,21 @@ function AdminLayout({
     </Box>
   );
 
+  const fullName =
+    [profileData?.firstName, profileData?.lastName].filter(Boolean).join(" ") ||
+    profileData?.name ||
+    "";
+  const userInitials = getInitials(fullName) || "A";
+  const photoName =
+    profileData?.photo || profileData?.profilePicture || profileData?.avatar;
+  const avatarSrc = photoName
+    ? buildAssetUrl({
+        baseUrl: VITE_APP_ASSETS_PATH,
+        folderLocation: profileData?.folderLocation,
+        fileName: photoName,
+      })
+    : undefined;
+
   return (
     <>
       <CssBaseline />
@@ -256,10 +272,20 @@ function AdminLayout({
             <Tooltip title="User Settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
-                  src={`${VITE_APP_ASSETS_PATH}${profileData?.folderLocation}/${profileData?.photo}`}
-                  alt={`${profileData?.firstName?.split(" ")?.[0]?.[0]}${profileData?.lastName?.split(" ")?.[0]?.[0]}`}
-                  sx={{ cursor: "pointer" }}
-                />
+                  src={avatarSrc}
+                  alt={fullName || "Admin"}
+                  sx={{
+                    cursor: "pointer",
+                    bgcolor: avatarSrc ? "transparent" : "primary.main",
+                    color: "primary.contrastText",
+                    fontWeight: 700,
+                    width: 38,
+                    height: 38,
+                    fontSize: "0.95rem",
+                  }}
+                >
+                  {!avatarSrc ? userInitials : null}
+                </Avatar>
               </IconButton>
             </Tooltip>
 

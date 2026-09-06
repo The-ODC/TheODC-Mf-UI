@@ -42,6 +42,8 @@ function UserLayout({
       handleLogout();
     } else {
       removeCookie("auth_token");
+      removeCookie("user_id");
+      removeCookie("user_role");
       setOpenLogoutModal(false);
       window.location.reload();
     }

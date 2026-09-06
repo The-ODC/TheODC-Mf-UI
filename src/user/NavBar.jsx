@@ -31,6 +31,7 @@ import {
 import { DARK_LOGO, LIGHT_LOGO } from "../assets";
 import { ThemeContext } from "../theme";
 import { VITE_APP_ASSETS_PATH } from "../config/env";
+import { buildAssetUrl, getInitials } from "../utility";
 import { NAV_DOCK_HEIGHT, navItems } from "./constant";
 
 function NavBar({
@@ -241,100 +242,121 @@ function NavBar({
 
             {/* Sign In or User Avatar Menu */}
             {isUserLoggedIn ? (
-              <Box sx={{ flexGrow: 0, ml: 0.5 }}>
-                <Tooltip title="User Account">
-                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar
-                      src={
-                        profileData?.profilePicture
-                          ? `${VITE_APP_ASSETS_PATH}/${profileData?.folderLocation}/${profileData?.profilePicture}`
-                          : undefined
-                      }
-                      alt={`${profileData?.firstName || "U"}`}
-                      sx={{
-                        cursor: "pointer",
-                        bgcolor: "primary.main",
-                        color: "#FFFFFF",
-                        fontWeight: 700,
-                        width: 34,
-                        height: 34,
+              (() => {
+                const userFullName =
+                  [profileData?.firstName, profileData?.lastName]
+                    .filter(Boolean)
+                    .join(" ") ||
+                  profileData?.name ||
+                  "";
+                const userInitials =
+                  getInitials(userFullName) ||
+                  profileData?.firstName?.[0] ||
+                  "U";
+                const avatarPhoto =
+                  profileData?.profilePicture || profileData?.photo;
+                const avatarSrc = avatarPhoto
+                  ? buildAssetUrl({
+                      baseUrl: VITE_APP_ASSETS_PATH,
+                      folderLocation: profileData?.folderLocation,
+                      fileName: avatarPhoto,
+                    })
+                  : undefined;
+
+                return (
+                  <Box sx={{ flexGrow: 0, ml: 0.5 }}>
+                    <Tooltip title="User Account">
+                      <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                        <Avatar
+                          src={avatarSrc}
+                          alt={userFullName || "User"}
+                          sx={{
+                            cursor: "pointer",
+                            bgcolor: avatarSrc ? "transparent" : "primary.main",
+                            color: "#FFFFFF",
+                            fontWeight: 700,
+                            width: 34,
+                            height: 34,
+                            fontSize: "0.9rem",
+                          }}
+                        >
+                          {!avatarSrc ? userInitials : null}
+                        </Avatar>
+                      </IconButton>
+                    </Tooltip>
+
+                    <Popover
+                      id="user-menu"
+                      anchorEl={anchorElUser}
+                      open={Boolean(anchorElUser)}
+                      onClose={handleCloseUserMenu}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "right",
+                      }}
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      PaperProps={{
+                        sx: { minWidth: 200, borderRadius: "16px", p: 1 },
                       }}
                     >
-                      {profileData?.firstName?.[0] || "U"}
-                    </Avatar>
-                  </IconButton>
-                </Tooltip>
+                      <MenuItem disabled sx={{ opacity: "0.8 !important" }}>
+                        <ListItemIcon>
+                          <Info fontSize="small" />
+                        </ListItemIcon>
+                        <Typography variant="caption">
+                          Version: {version}
+                        </Typography>
+                      </MenuItem>
 
-                <Popover
-                  id="user-menu"
-                  anchorEl={anchorElUser}
-                  open={Boolean(anchorElUser)}
-                  onClose={handleCloseUserMenu}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "right",
-                  }}
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  PaperProps={{
-                    sx: { minWidth: 200, borderRadius: "16px", p: 1 },
-                  }}
-                >
-                  <MenuItem disabled sx={{ opacity: "0.8 !important" }}>
-                    <ListItemIcon>
-                      <Info fontSize="small" />
-                    </ListItemIcon>
-                    <Typography variant="caption">
-                      Version: {version}
-                    </Typography>
-                  </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          handleCloseUserMenu();
+                          navigate("/profile");
+                        }}
+                      >
+                        <ListItemIcon>
+                          <AccountCircle fontSize="small" />
+                        </ListItemIcon>
+                        <Typography variant="body2" fontWeight={600}>
+                          My Profile
+                        </Typography>
+                      </MenuItem>
 
-                  <MenuItem
-                    onClick={() => {
-                      handleCloseUserMenu();
-                      navigate("/profile");
-                    }}
-                  >
-                    <ListItemIcon>
-                      <AccountCircle fontSize="small" />
-                    </ListItemIcon>
-                    <Typography variant="body2" fontWeight={600}>
-                      My Profile
-                    </Typography>
-                  </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          handleCloseUserMenu();
+                          navigate("/my-orders");
+                        }}
+                      >
+                        <ListItemIcon>
+                          <ShoppingBag fontSize="small" />
+                        </ListItemIcon>
+                        <Typography variant="body2" fontWeight={600}>
+                          My Orders
+                        </Typography>
+                      </MenuItem>
 
-                  <MenuItem
-                    onClick={() => {
-                      handleCloseUserMenu();
-                      navigate("/my-orders");
-                    }}
-                  >
-                    <ListItemIcon>
-                      <ShoppingBag fontSize="small" />
-                    </ListItemIcon>
-                    <Typography variant="body2" fontWeight={600}>
-                      My Orders
-                    </Typography>
-                  </MenuItem>
-
-                  <MenuItem
-                    onClick={() => {
-                      handleCloseUserMenu();
-                      openLogoutDialog();
-                    }}
-                    sx={{ color: "error.main" }}
-                  >
-                    <ListItemIcon>
-                      <Logout fontSize="small" color="error" />
-                    </ListItemIcon>
-                    <Typography variant="body2" fontWeight={700}>
-                      Logout
-                    </Typography>
-                  </MenuItem>
-                </Popover>
-              </Box>
+                      <MenuItem
+                        onClick={() => {
+                          handleCloseUserMenu();
+                          openLogoutDialog();
+                        }}
+                        sx={{ color: "error.main" }}
+                      >
+                        <ListItemIcon>
+                          <Logout fontSize="small" color="error" />
+                        </ListItemIcon>
+                        <Typography variant="body2" fontWeight={700}>
+                          Logout
+                        </Typography>
+                      </MenuItem>
+                    </Popover>
+                  </Box>
+                );
+              })()
             ) : (
               <Button
                 variant="text"
