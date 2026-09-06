@@ -13,21 +13,18 @@ Welcome to the **TheOdcMfUI** Microfrontend. This guide will help you integrate 
 - [Overview](#overview)
 - [Features](#features)
 - [Integration in Remote App](#integration-in-remote-app)
-  - [Step 1: Install Dependencies](#step-1-install-dependencies)
-  - [Step 2: Update vite.config.js](#step-2-update-viteconfigjs)
-  - [Step 3: Add Environment Variable](#step-3-add-environment-variable)
 - [Example Usage](#example-usage)
 - [References](#references)
 
 ---
 
-<h2 id="overview">🔍 Overview</h2>
+## 🔍 Overview
 
 **TheOdcMfUI** is a **Vite-powered Microfrontend** that exposes reusable UI modules such as layouts, forms, theme providers, etc. It is intended to be consumed by remote apps via **Module Federation**.
 
 ---
 
-<h2 id="features">📦 Features</h2>
+## 📦 Features
 
 - Built using **Vite + React 19 + MUI v7**
 - Exposes shared UI components
@@ -37,15 +34,13 @@ Welcome to the **TheOdcMfUI** Microfrontend. This guide will help you integrate 
 
 ---
 
-<h2 id="integration-in-remote-app">🧩 Integration in Remote App</h2>
+## 🧩 Integration in Remote App
 
 To consume `TheOdcMfUI` from a host or remote app:
 
 ---
 
-<h3 id="step-1-install-dependencies">✅ Step 1: Install Dependencies</h3>
-
----
+### ✅ Step 1: Install Dependencies
 
 ```bash
 npm install @originjs/vite-plugin-federation --save-dev
@@ -53,13 +48,9 @@ npm install @originjs/vite-plugin-federation --save-dev
 
 ---
 
-<h3 id="step-2-update-viteconfigjs">✅ Step 2: Update vite.config.js</h3>
-
----
+### ✅ Step 2: Update vite.config.js
 
 ```js
-// vite.config.js
-
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
 import federation from "@originjs/vite-plugin-federation";
@@ -72,7 +63,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       federation({
-        name: "TheOdcUserFE", // name of your consuming app
+        name: "TheOdcUserFE",
         remotes: {
           TheOdcMfUI: `${env.VITE_MF_REMOTE_URL}/assets/remoteEntry.js`,
         },
@@ -125,21 +116,6 @@ export default defineConfig(({ mode }) => {
           },
         },
       }),
-
-      // Optional: Local development full reload support
-      {
-        name: "vite-plugin-reload-endpoint",
-        configureServer(server) {
-          server.middlewares.use((req, res, next) => {
-            if (req.url === "/__fullReload") {
-              server.hot.send({ type: "full-reload" });
-              res.end("Full reload triggered");
-            } else {
-              next();
-            }
-          });
-        },
-      },
     ],
 
     server: {
@@ -162,25 +138,21 @@ export default defineConfig(({ mode }) => {
 
 ---
 
-<h3 id="step-3-add-environment-variable">
-  ✅ Step 3: Add Environment Variable
-</h3>
+### ✅ Step 3: Add Environment Variable
 
 In your `.env` file:
 
-```
-// Remote URL
+```env
+# Remote URL
 VITE_MF_REMOTE_URL=https://theodc-mf-ui.vercel.app
 
-// Local URL
+# Local URL
 VITE_MF_REMOTE_URL=http://localhost:5000
 ```
 
-> Replace the port with the actual one used by your `TheOdcMfUI` remote during local development.
-
 ---
 
-<h3 id="example-usage">🧩 Example Usage</h3>
+### 🧩 Example Usage
 
 Use components from `TheOdcMfUI` like this:
 
@@ -201,10 +173,8 @@ Use inside a Suspense boundary:
 
 ---
 
-<h3 id="references">📚 References</h3>
+### 📚 References
 
 - [Vite Plugin Federation Docs](https://github.com/originjs/vite-plugin-federation)
 - [Microfrontend Architecture](https://micro-frontends.org/)
 - [Vite Documentation](https://vitejs.dev)
-
----

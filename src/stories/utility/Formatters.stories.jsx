@@ -5,7 +5,7 @@ import {
   CardContent,
   Chip,
   Divider,
-  Grid2 as Grid,
+  Grid,
   Paper,
   Stack,
   Tab,
@@ -420,6 +420,42 @@ import {
 
 export const LivePlayground = {
   render: () => <InteractivePlayground />,
+  parameters: {
+    docs: {
+      source: {
+        code: `import {
+  formatCurrency,
+  formatDate,
+  formatTime,
+  formatDateTime,
+  readableLabel,
+  formatAddress,
+  getInitials,
+} from "TheOdcMfUI/utility/formatters";
+
+// 1. Currency
+formatCurrency(1499.99, { currency: "INR", locale: "en-IN" }); // "₹1,499.99"
+
+// 2. Date & Time
+formatDateTime("2026-09-06T14:30:00Z", { locale: "en-IN" }); // "6 Sept 2026, 8:00 pm"
+formatDate("2026-09-06T14:30:00Z"); // "6 Sept 2026"
+formatTime("2026-09-06T14:30:00Z"); // "8:00 pm"
+
+// 3. Readable Labels & Initials
+readableLabel("totalDiscountAmount"); // "Total Discount Amount"
+getInitials("Rahul Sharma"); // "RS"
+
+// 4. Address Normalization
+formatAddress({
+  line1: "Flat 402, Sunshine Towers",
+  city: "Mumbai",
+  state: "Maharashtra",
+  postalCode: "400050",
+  country: "India",
+});`,
+      },
+    },
+  },
 };
 
 export const CurrencyExamples = {

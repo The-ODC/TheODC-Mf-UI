@@ -65,4 +65,18 @@ export default {
 
 export const Default = {
   render: () => <ThrottleDemo />,
+  parameters: {
+    docs: {
+      source: {
+        code: `import { throttle } from "TheOdcMfUI/utility/throttle";
+
+// Limits function execution to at most once per second
+const handleScrollOrResize = throttle((event) => {
+  console.log("Throttled event execution:", event);
+}, 1000);
+
+window.addEventListener("scroll", handleScrollOrResize);`,
+      },
+    },
+  },
 };
