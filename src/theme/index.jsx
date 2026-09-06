@@ -2,7 +2,13 @@ import packageJson from "../../package.json";
 
 export { ThemeContext, ThemeProviderWrapper } from "./ThemeProviderWrapper";
 export { getTheme } from "./theme";
-export { default as COLORS } from "./colors";
+export {
+  default as COLORS,
+  COLORS as THEME_COLORS,
+  CHART_PALETTE,
+  STATUS_COLORS,
+  BRAND_GRADIENTS,
+} from "./colors";
 
 // Log version in console
 console.log(

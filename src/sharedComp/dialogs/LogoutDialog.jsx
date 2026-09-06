@@ -7,19 +7,16 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import useCookies from "../../hooks/useCookies";
 
 function LogoutDialog({
   open,
   onClose,
   handleConfirm,
-  title = "Are you sure?",
-  description = "Are you sure you want to perform this action?",
-  confirmLabel = "Confirm",
+  title = "Ready to log out?",
+  description = "You’ll be logged out of your account. Don’t worry, we’ll keep your session safe so you can log back in anytime.",
+  confirmLabel = "Yes, Log Me Out",
   cancelLabel = "Cancel",
 }) {
-  const { removeCookie } = useCookies();
-
   const cancelRef = useRef(null);
   const confirmRef = useRef(null);
   const [btnWidth, setBtnWidth] = useState(100);
@@ -36,8 +33,10 @@ function LogoutDialog({
     if (typeof handleConfirm === "function") {
       handleConfirm();
     } else {
-      removeCookie("auth_token");
-      onClose();
+      alert("Logout function not provided");
+      if (typeof onClose === "function") {
+        onClose();
+      }
       window.location.reload();
     }
   };
@@ -58,7 +57,12 @@ function LogoutDialog({
       </DialogTitle>
       <DialogContent>{description}</DialogContent>
       <DialogActions sx={{ padding: "24px" }}>
-        <Button ref={cancelRef} onClick={onClose} sx={{ minWidth: btnWidth }}>
+        <Button
+          variant="outlined"
+          ref={cancelRef}
+          onClick={onClose}
+          sx={{ minWidth: btnWidth }}
+        >
           {cancelLabel}
         </Button>
         <Button
@@ -76,7 +80,7 @@ function LogoutDialog({
 LogoutDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  handleConfirm: PropTypes.func.isRequired,
+  handleConfirm: PropTypes.func,
   title: PropTypes.string,
   description: PropTypes.string,
   confirmLabel: PropTypes.string,

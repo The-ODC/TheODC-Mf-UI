@@ -1,9 +1,13 @@
 export function getRecordId(record, keys = ["id", "_id"]) {
   if (!record) return "";
+  if (typeof record === "string") return record.trim();
+  if (typeof record === "number") return String(record);
 
   const keyList = Array.isArray(keys) ? keys : [keys];
-  const value = keyList.map((key) => record?.[key]).find(Boolean);
-  return value ? String(value) : "";
+  const value = keyList
+    .map((key) => record?.[key])
+    .find((v) => v !== undefined && v !== null && v !== "");
+  return value ? String(value).trim() : "";
 }
 
 export function getActivePrice(
@@ -20,16 +24,31 @@ export function formatCurrency(
   {
     locale = "en-IN",
     currency = "INR",
+    showSymbol = true,
     maximumFractionDigits = 2,
     minimumFractionDigits,
   } = {}
 ) {
-  return new Intl.NumberFormat(locale, {
-    style: "currency",
-    currency,
+  let numericValue = 0;
+  if (typeof value === "number") {
+    numericValue = Number.isNaN(value) ? 0 : value;
+  } else if (typeof value === "string") {
+    const cleaned = value.replace(/[^0-9.-]+/g, "");
+    numericValue = cleaned ? Number(cleaned) : 0;
+    if (Number.isNaN(numericValue)) numericValue = 0;
+  }
+
+  const options = {
     maximumFractionDigits,
     ...(minimumFractionDigits !== undefined ? { minimumFractionDigits } : {}),
-  }).format(Number(value || 0));
+  };
+
+  if (showSymbol && currency) {
+    options.style = "currency";
+    options.currency = currency;
+  }
+
+  return new Intl.NumberFormat(locale, options).format(numericValue);
 }
 
 export function formatDateTime(
@@ -71,4 +90,14 @@ export function formatAddress(address = {}, fields) {
     .map((field) => address?.[field])
     .filter(Boolean)
     .join(", ");
+}
+
+export function getInitials(name) {
+  if (!name || typeof name !== "string") return "";
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "";
+  if (parts.length === 1) {
+    return parts[0].slice(0, 2).toUpperCase();
+  }
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }

@@ -27,6 +27,7 @@ import {
   FastfoodTwoTone,
   DeliveryDiningTwoTone,
   PaymentsTwoTone,
+  ContactMailTwoTone,
   SupportAgentTwoTone,
   DarkMode,
   LightMode,
@@ -36,16 +37,26 @@ import {
 } from "@mui/icons-material";
 import { NavLink, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../theme/ThemeProviderWrapper";
-import { LOGO_1 } from "../assets";
+import { DARK_LOGO, LIGHT_LOGO } from "../assets";
 import { VITE_APP_ASSETS_PATH } from "../config/env";
 import LogoutDialog from "../sharedComp/dialogs/LogoutDialog";
+import useCookies from "../hooks/useCookies";
 
-function AdminLayout({ children, version, profileData }) {
+function AdminLayout({
+  children,
+  version,
+  profileData,
+  openLogoutDialog,
+  handleLogout,
+  menuItems = [],
+}) {
   // // initial state
   const drawerWidth = 270;
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { mode, toggleTheme } = useContext(ThemeContext);
+  const isDark = theme.palette.mode === "dark" || mode === "dark";
+  const { removeCookie } = useCookies();
   const navigate = useNavigate();
 
   // // local setup
@@ -53,7 +64,7 @@ function AdminLayout({ children, version, profileData }) {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
 
-  const menuItems = [
+  const defaultMenuItems = [
     { text: "Dashboard", icon: <DashboardTwoTone />, path: "/" },
     {
       text: "User Management",
@@ -75,7 +86,17 @@ function AdminLayout({ children, version, profileData }) {
       icon: <PaymentsTwoTone />,
       path: "/payment-management",
     },
+    {
+      text: "Contact Inquiries",
+      icon: <ContactMailTwoTone />,
+      path: "/inquiries",
+    },
   ];
+
+  const navigationItems =
+    Array.isArray(menuItems) && menuItems.length > 0
+      ? menuItems
+      : defaultMenuItems;
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -89,13 +110,39 @@ function AdminLayout({ children, version, profileData }) {
     setAnchorElUser(null);
   };
 
+  const handleLogoutClick = () => {
+    handleCloseUserMenu();
+    if (typeof openLogoutDialog === "function") {
+      openLogoutDialog();
+    } else {
+      setOpenLogoutModal(true);
+    }
+  };
+
+  const handleConfirmLogout = () => {
+    if (typeof handleLogout === "function") {
+      handleLogout();
+    } else {
+      removeCookie("admin_auth_token");
+      removeCookie("admin_id");
+      setOpenLogoutModal(false);
+      window.location.reload();
+    }
+  };
+
   const drawer = (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <Toolbar
-      // sx={{ minHeight: { xs: 70, md: 80 } }}
+        sx={{
+          minHeight: {
+            xs: "72px !important",
+            sm: "78px !important",
+            md: "84px !important",
+          },
+        }}
       />
       <List>
-        {menuItems.map((menu) => (
+        {navigationItems.map((menu) => (
           <NavLink
             key={menu.text}
             to={menu.path}
@@ -155,12 +202,26 @@ function AdminLayout({ children, version, profileData }) {
   return (
     <>
       <CssBaseline />
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+      <AppBar
+        position="fixed"
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
         <Toolbar
-        //  sx={{ py: 1.5 }}
+          sx={{
+            minHeight: {
+              xs: "72px !important",
+              sm: "78px !important",
+              md: "84px !important",
+            },
+            px: { xs: 1.5, sm: 2.5 },
+          }}
         >
           {isMobile && (
-            <IconButton edge="start" color="inherit" onClick={handleDrawerToggle}>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={handleDrawerToggle}
+            >
               <MenuIcon />
             </IconButton>
           )}
@@ -170,14 +231,23 @@ function AdminLayout({ children, version, profileData }) {
               display: "flex",
               alignItems: "center",
               justifyContent: { xs: "center", md: "start" },
-              img: {
-                width: { xs: 160, md: 200 },
-                cursor: "pointer",
-              },
+              py: 0.5,
             }}
             onClick={() => navigate("/")}
           >
-            <Box component="img" src={LOGO_1} alt="OdBites Logo" sx={{}} />
+            <Box
+              component="img"
+              src={isDark ? DARK_LOGO : LIGHT_LOGO}
+              alt="The ODC Logo"
+              sx={{
+                width: "auto",
+                maxHeight: { xs: 52, sm: 60, md: 68 },
+                objectFit: "contain",
+                cursor: "pointer",
+                transition: "transform 0.2s ease",
+                "&:hover": { transform: "scale(1.02)" },
+              }}
+            />
           </Box>
           <IconButton onClick={toggleTheme} color="inherit">
             {mode === "light" ? <DarkMode /> : <LightMode />}
@@ -226,12 +296,7 @@ function AdminLayout({ children, version, profileData }) {
                 <Typography variant="inherit">Profile</Typography>
               </MenuItem>
 
-              <MenuItem
-                onClick={() => {
-                  handleCloseUserMenu();
-                  setOpenLogoutModal(true);
-                }}
-              >
+              <MenuItem onClick={handleLogoutClick}>
                 <ListItemIcon>
                   <Logout fontSize="small" />
                 </ListItemIcon>
@@ -280,9 +345,18 @@ function AdminLayout({ children, version, profileData }) {
             xs: "100%",
             md: `calc(100% - ${drawerWidth}px)`,
           },
+          p: { xs: 2, sm: 3 },
         }}
       >
-        <Toolbar sx={{ minHeight: { xs: 50 } }} />
+        <Toolbar
+          sx={{
+            minHeight: {
+              xs: "72px !important",
+              sm: "78px !important",
+              md: "84px !important",
+            },
+          }}
+        />
 
         {children}
       </Box>
@@ -290,6 +364,7 @@ function AdminLayout({ children, version, profileData }) {
       <LogoutDialog
         open={openLogoutModal}
         onClose={() => setOpenLogoutModal(false)}
+        handleConfirm={handleConfirmLogout}
         title="Ready to log out?"
         description="You’ll be logged out of your account. Don’t worry, we’ll keep your session safe so you can log back in anytime."
         confirmLabel="Yes, Log Me Out"
@@ -301,8 +376,17 @@ function AdminLayout({ children, version, profileData }) {
 
 AdminLayout.propTypes = {
   children: PropTypes.node.isRequired,
-  version: PropTypes.string.isRequired || PropTypes.number.isRequired,
-  profileData: PropTypes.object.isRequired,
+  version: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  profileData: PropTypes.object,
+  openLogoutDialog: PropTypes.func,
+  handleLogout: PropTypes.func,
+  menuItems: PropTypes.arrayOf(
+    PropTypes.shape({
+      text: PropTypes.string.isRequired,
+      icon: PropTypes.node,
+      path: PropTypes.string.isRequired,
+    })
+  ),
 };
 
 export default AdminLayout;

@@ -14,9 +14,7 @@ export const getTheme = (mode) => {
       mode,
       primary: { main: COLORS.PRIMARY, contrastText: "#ffffff" },
       secondary: { main: COLORS.SECONDARY, contrastText: "#ffffff" },
-      error: { main: COLORS.ERROR, contrastText: "#ffffff" },
       warning: { main: COLORS.WARNING, contrastText: "#ffffff" },
-      success: { main: COLORS.SUCCESS, contrastText: "#ffffff" },
       info: { main: COLORS.INFO, contrastText: "#ffffff" },
 
       ...(mode === "light"
@@ -27,6 +25,8 @@ export const getTheme = (mode) => {
               secondary: COLORS.LIGHT_TEXT_SECONDARY,
             },
             divider: COLORS.LIGHT_DIVIDER,
+            success: { main: COLORS.SUCCESS, contrastText: "#ffffff" },
+            error: { main: COLORS.ERROR, contrastText: "#ffffff" },
           }
         : {
             background: { default: COLORS.DARK_BG, paper: COLORS.DARK_PAPER },
@@ -35,61 +35,83 @@ export const getTheme = (mode) => {
               secondary: COLORS.DARK_TEXT_SECONDARY,
             },
             divider: COLORS.DARK_DIVIDER,
+            success: { main: "#34C759", contrastText: "#ffffff" },
+            error: { main: "#FF453A", contrastText: "#ffffff" },
           }),
     },
 
     typography: {
-      fontFamily: "'Montserrat', sans-serif",
+      fontFamily: "'Inter', sans-serif",
       h1: {
+        fontFamily: "'Plus Jakarta Sans', sans-serif",
         fontSize: "2.5rem",
         fontWeight: 700,
         "@media (max-width:960px)": { fontSize: "2.25rem" },
         "@media (max-width:600px)": { fontSize: "2rem" },
       },
       h2: {
+        fontFamily: "'Plus Jakarta Sans', sans-serif",
         fontSize: "2rem",
-        fontWeight: 600,
+        fontWeight: 700,
         "@media (max-width:960px)": { fontSize: "1.85rem" },
         "@media (max-width:600px)": { fontSize: "1.75rem" },
       },
       h3: {
+        fontFamily: "'Plus Jakarta Sans', sans-serif",
         fontSize: "1.75rem",
         fontWeight: 600,
         "@media (max-width:960px)": { fontSize: "1.6rem" },
         "@media (max-width:600px)": { fontSize: "1.5rem" },
       },
       h4: {
+        fontFamily: "'Plus Jakarta Sans', sans-serif",
         fontSize: "1.5rem",
-        fontWeight: 500,
+        fontWeight: 600,
         "@media (max-width:960px)": { fontSize: "1.35rem" },
         "@media (max-width:600px)": { fontSize: "1.25rem" },
       },
       h5: {
+        fontFamily: "'Plus Jakarta Sans', sans-serif",
         fontSize: "1.25rem",
-        fontWeight: 500,
+        fontWeight: 600,
         "@media (max-width:960px)": { fontSize: "1.1rem" },
         "@media (max-width:600px)": { fontSize: "1rem" },
       },
       h6: {
+        fontFamily: "'Plus Jakarta Sans', sans-serif",
         fontSize: "1rem",
-        fontWeight: 500,
+        fontWeight: 600,
         "@media (max-width:960px)": { fontSize: "0.9rem" },
         "@media (max-width:600px)": { fontSize: "0.875rem" },
       },
       body1: {
+        fontFamily: "'Inter', sans-serif",
         fontSize: "1rem",
         "@media (max-width:960px)": { fontSize: "0.95rem" },
         "@media (max-width:600px)": { fontSize: "0.875rem" },
       },
       body2: {
+        fontFamily: "'Inter', sans-serif",
         fontSize: "0.875rem",
         "@media (max-width:960px)": { fontSize: "0.825rem" },
         "@media (max-width:600px)": { fontSize: "0.75rem" },
       },
-      subtitle1: { fontSize: "1rem" },
-      subtitle2: { fontSize: "0.875rem" },
-      button: { textTransform: "none", fontWeight: 600 },
-      caption: { fontSize: "0.75rem" },
+      subtitle1: {
+        fontFamily: "'Inter', sans-serif",
+        fontSize: "1rem",
+        fontWeight: 500,
+      },
+      subtitle2: {
+        fontFamily: "'Inter', sans-serif",
+        fontSize: "0.875rem",
+        fontWeight: 500,
+      },
+      button: {
+        fontFamily: "'Plus Jakarta Sans', sans-serif",
+        textTransform: "none",
+        fontWeight: 600,
+      },
+      caption: { fontFamily: "'Inter', sans-serif", fontSize: "0.75rem" },
     },
 
     spacing: 8,
@@ -99,14 +121,15 @@ export const getTheme = (mode) => {
         defaultProps: { variant: "contained", color: "primary" },
         styleOverrides: {
           root: {
-            borderRadius: "8px",
-            padding: "10px 16px",
+            borderRadius: "50px",
+            padding: "10px 24px",
             transition: "0.3s",
+            fontFamily: "'Plus Jakarta Sans', sans-serif",
           },
           sizeMicro: {
-            padding: "5px 10px",
+            padding: "5px 14px",
             fontSize: "0.8rem",
-            borderRadius: "7px",
+            borderRadius: "20px",
           },
         },
       },
@@ -114,8 +137,12 @@ export const getTheme = (mode) => {
       MuiAppBar: {
         styleOverrides: {
           root: {
-            backgroundColor: mode === "light" ? "#ffffff" : "#1E1E1E",
-            color: mode === "light" ? "#000" : "#fff",
+            backgroundColor:
+              mode === "light" ? COLORS.LIGHT_BG : COLORS.DARK_BG,
+            color:
+              mode === "light"
+                ? COLORS.LIGHT_TEXT_PRIMARY
+                : COLORS.DARK_TEXT_PRIMARY,
           },
         },
       },
@@ -123,10 +150,17 @@ export const getTheme = (mode) => {
       MuiCard: {
         styleOverrides: {
           root: ({ theme }) => ({
-            backgroundColor: mode === "light" ? "#fff" : "#1E1E1E",
-            boxShadow: "0px 4px 20px rgba(0,0,0,0.05)",
-            padding: "12px",
-            borderRadius: "8px",
+            backgroundColor:
+              mode === "light" ? COLORS.LIGHT_PAPER : COLORS.DARK_PAPER,
+            boxShadow:
+              mode === "light"
+                ? "0px 6px 24px rgba(11, 12, 16, 0.04)"
+                : "0px 6px 24px rgba(0, 0, 0, 0.25)",
+            padding: "16px",
+            borderRadius: "16px",
+            border: "1px solid",
+            borderColor:
+              mode === "light" ? COLORS.LIGHT_DIVIDER : COLORS.DARK_DIVIDER,
             [theme.breakpoints.up("md")]: {
               padding: "24px",
             },
@@ -140,19 +174,23 @@ export const getTheme = (mode) => {
           root: {
             "& .MuiInputBase-root": {
               height: "45px",
+              borderRadius: "50px",
               "& input": {
-                padding: "8px 14px",
+                padding: "8px 20px",
               },
             },
             "& .MuiInputBase-root.MuiInputBase-multiline": {
               height: "auto",
-              padding: "8px 14px",
+              borderRadius: "20px",
+              padding: "8px 20px",
             },
             "& .MuiOutlinedInput-root": {
               height: "45px",
+              borderRadius: "50px",
             },
             "& .MuiOutlinedInput-root.MuiInputBase-multiline": {
               height: "auto",
+              borderRadius: "20px",
             },
           },
         },
@@ -172,8 +210,11 @@ export const getTheme = (mode) => {
       MuiSelect: {
         styleOverrides: {
           root: {
-            color: mode === "light" ? "#000" : "#fff",
-            borderRadius: "8px",
+            color:
+              mode === "light"
+                ? COLORS.LIGHT_TEXT_PRIMARY
+                : COLORS.DARK_TEXT_PRIMARY,
+            borderRadius: "50px",
             height: "45px",
           },
         },
@@ -221,7 +262,8 @@ export const getTheme = (mode) => {
       MuiTable: {
         styleOverrides: {
           root: {
-            backgroundColor: mode === "light" ? "#fff" : "#333",
+            backgroundColor:
+              mode === "light" ? COLORS.LIGHT_PAPER : COLORS.DARK_PAPER,
           },
         },
       },
@@ -234,6 +276,9 @@ export const getTheme = (mode) => {
               mode === "light"
                 ? COLORS.LIGHT_TEXT_PRIMARY
                 : COLORS.DARK_TEXT_PRIMARY,
+            borderBottom: "1px solid",
+            borderBottomColor:
+              mode === "light" ? COLORS.LIGHT_DIVIDER : COLORS.DARK_DIVIDER,
           },
         },
       },
@@ -257,19 +302,15 @@ export const getTheme = (mode) => {
           },
         },
       },
-    },
 
-    MuiInputAdornment: {
-      styleOverrides: {
-        root: {
-          color: mode === "light" ? "#6C757D" : "#E0E0E0",
-        },
-      },
-    },
-    MuiSvgIcon: {
-      styleOverrides: {
-        root: {
-          color: mode === "light" ? "#6C757D" : "#E0E0E0",
+      MuiInputAdornment: {
+        styleOverrides: {
+          root: {
+            color:
+              mode === "light"
+                ? COLORS.LIGHT_TEXT_SECONDARY
+                : COLORS.DARK_TEXT_SECONDARY,
+          },
         },
       },
     },
